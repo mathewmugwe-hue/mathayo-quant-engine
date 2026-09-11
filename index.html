@@ -3,19 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mathayo Pro 2026 - Institutional Sports & Jackpot Engine</title>
+  <title>Mathayo Multi-Agent Quant Engine (2026 Institutional Edition)</title>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <style>
     :root {
-      --bg: #050811; --card: #0e1626; --panel: #131f36; --border: #1e293b;
-      --accent: #2563eb; --accent-hover: #1d4ed8; --green: #10b981;
-      --yellow: #f59e0b; --red: #ef4444; --text: #f8fafc; --sub: #94a3b8;
+      --bg: #040711; --card: #0c1322; --panel: #111b30; --border: #1e293b;
+      --accent: #2563eb; --green: #10b981; --yellow: #f59e0b; --red: #ef4444;
+      --text: #f8fafc; --sub: #94a3b8;
     }
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 16px; }
-    .header { border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-    .header h1 { margin: 0; font-size: 1.4rem; color: #fff; }
+    .header { border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .header h1 { margin: 0; font-size: 1.35rem; color: #fff; }
     .header p { margin: 4px 0 0; font-size: 0.8rem; color: var(--sub); }
+
+    .backend-bar { display: flex; align-items: center; gap: 8px; background: #080d1a; border: 1px solid #1e3a8a; padding: 6px 12px; border-radius: 6px; }
+    .backend-bar label { font-size: 0.75rem; color: #93c5fd; font-weight: 600; }
+    .backend-bar input { width: 280px; background: #0f172a; border: 1px solid #334155; color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 0.78rem; font-family: monospace; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); display: inline-block; }
+    .status-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
     .nav { display: flex; gap: 8px; margin-bottom: 16px; }
     .nav-btn { background: var(--card); border: 1px solid var(--border); color: var(--sub); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
@@ -26,13 +32,11 @@
     h2 { margin: 0 0 12px; font-size: 0.8rem; color: var(--sub); text-transform: uppercase; letter-spacing: 0.05em; }
 
     textarea, input, select, button { width: 100%; background: var(--panel); border: 1px solid var(--border); color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 0.82rem; }
-    textarea { height: 180px; font-family: ui-monospace, monospace; resize: vertical; }
+    textarea { height: 180px; font-family: monospace; resize: vertical; }
     button { background: var(--accent); font-weight: 700; cursor: pointer; border: none; margin-top: 10px; padding: 11px; transition: 0.2s; }
-    button:hover { background: var(--accent-hover); }
+    button:hover { opacity: 0.9; }
 
     .drop-zone { border: 2px dashed #334155; padding: 14px; text-align: center; border-radius: 6px; background: var(--panel); cursor: pointer; margin-bottom: 10px; }
-    .drop-zone:hover { border-color: var(--accent); }
-
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.8rem; }
     th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
     th { background: #0b1120; color: var(--sub); }
@@ -43,45 +47,47 @@
 
     .slip-box { background: #0b1222; border: 1px solid #1e3a8a; border-left: 4px solid var(--green); border-radius: 6px; padding: 14px; margin-bottom: 12px; }
     .slip-head { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; color: #93c5fd; }
-    .slip-leg { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.82rem; border-bottom: 1px dashed #1e293b; }
+    .slip-leg { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.82rem; border-bottom: 1px dashed #1e293b; }
     .slip-leg:last-child { border-bottom: none; }
-    
-    .winner-tag { color: var(--green); font-weight: 700; font-size: 0.85rem; }
-    .double-tag { color: #60a5fa; font-weight: 600; font-size: 0.82rem; }
+    .winner-tag { color: var(--green); font-weight: 700; }
     .copy-btn { width: auto; padding: 5px 12px; margin-top: 0; background: #1e293b; font-size: 0.75rem; border: 1px solid #334155; }
-    .copy-btn:hover { background: #334155; }
-    .btn-row { display: flex; gap: 6px; margin-top: 6px; }
-    .demo-btn { background: #132238; color: #93c5fd; font-size: 0.72rem; padding: 6px; border: 1px solid #1e3a8a; margin-top: 0; }
+    .log-box { background: #070b14; border: 1px solid #1e293b; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 0.75rem; color: #38bdf8; max-height: 120px; overflow-y: auto; margin-top: 10px; }
   </style>
 </head>
 <body>
 
   <div class="header">
     <div>
-      <h1>Mathayo Pro 2026 Engine</h1>
-      <p>Universal Bookmaker Ingestion • Bisection Shin De-Biasing • Orthogonal Accas • Full Wheeling Jackpots</p>
+      <h1>Mathayo Multi-Agent Quant Engine</h1>
+      <p>Autonomous Pipeline • Dixon-Coles MLE • Uncapped Accas • 100% Match Order Preserved</p>
+    </div>
+    <div class="backend-bar">
+      <span class="status-dot" id="pingDot"></span>
+      <label>Backend URL:</label>
+      <input type="text" id="backendUrl" value="https://mathayo-backend-v2.onrender.com" onchange="testBackendConnection()">
+      <button onclick="testBackendConnection()" style="width:auto; margin-top:0; padding:5px 10px; font-size:0.75rem; background:#1e3a8a;">Test</button>
     </div>
   </div>
 
   <div class="nav">
-    <button class="nav-btn active" onclick="switchTab('multi')">Multi-Bet Builder (All Matches & Zero Duplicate Risk)</button>
-    <button class="nav-btn" onclick="switchTab('jackpot')">Jackpot Wheeling Engine (All Matches 10/15/16/17)</button>
+    <button class="nav-btn active" onclick="switchTab('multi')">Orthogonal Multi-Bet Builder (Odds ≥ 3.00, Uncapped)</button>
+    <button class="nav-btn" onclick="switchTab('jackpot')">Jackpot Single & Permutation Engine (Matches 1 to N)</button>
   </div>
 
   <!-- MULTI-BET MODULE -->
   <div id="multiView">
     <div class="grid">
       <div class="card">
-        <h2>1. Paste Sportsbook Text / Screenshots</h2>
+        <h2>1. Raw Sportsbook Ingestion</h2>
         <div class="drop-zone" onclick="document.getElementById('fileMulti').click()">
-          <span id="ocrMultiText">📷 Upload Screenshot or Paste (Ctrl+V)</span>
-          <input type="file" id="fileMulti" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'multi')">
+          <span id="ocrMultiText">📷 Drop Screenshot or Paste (Ctrl+V)</span>
+          <input type="file" id="fileMulti" accept="image/*" style="display:none" onchange="runOCR(this.files[0], 'multi')">
         </div>
-        <textarea id="multiInput" placeholder="Paste all matches or screenshot text here..."></textarea>
+        <textarea id="multiInput" placeholder="Paste all matches here in any order... The engine maintains exact match sequence."></textarea>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:8px;">
           <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Target Min Odds</label>
+            <label style="font-size:0.72rem; color:var(--sub);">Target Min Odds (Uncapped)</label>
             <input type="number" id="minTargetOdds" value="3.00" step="0.1">
           </div>
           <div>
@@ -89,7 +95,6 @@
             <select id="legsPerSlip">
               <option value="2">2 Legs (Safe Double)</option>
               <option value="3" selected>3 Legs (Standard)</option>
-              <option value="4">4 Legs</option>
             </select>
           </div>
           <div>
@@ -98,25 +103,26 @@
           </div>
         </div>
 
-        <button onclick="executeMultiEngine()" style="background:var(--green);">Analyze All Matches & Build Slips</button>
+        <button onclick="dispatchPipeline('multi')" style="background:var(--green);">Execute Multi-Agent Pipeline</button>
+        <div class="log-box" id="agentLogs">Agents Status: Standby. Ready to ingest fixtures.</div>
       </div>
 
       <div class="card">
-        <h2>2. Evaluated Match Matrix (All Matches & Predicted Winners)</h2>
+        <h2>2. Evaluated Match Matrix (Matches 1 to N in Exact Order)</h2>
         <div style="overflow-y:auto; max-height:450px;">
           <table id="matrixTable">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Home Team vs Away Team</th>
-                <th>Predicted Winner</th>
-                <th>Odds</th>
+                <th>Verified Fixture</th>
+                <th>Quant Pick</th>
+                <th>Tactical xG</th>
+                <th>ClubElo Diff</th>
                 <th>Win Prob</th>
-                <th>Safety</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting match fixtures...</td></tr>
+              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting backend execution...</td></tr>
             </tbody>
           </table>
         </div>
@@ -124,9 +130,9 @@
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <h2>3. Independent Slips (Strictly Disjoint / 0% Overlapping Matches)</h2>
+      <h2>3. Uncapped Orthogonal Accumulators (Odds ≥ 3.00 | 0% Duplicate Legs)</h2>
       <div id="slipsContainer">
-        <p style="color:var(--sub); margin:0;">Accumulators will be built below using the analyzed matches above. Every match will be unique to its slip.</p>
+        <p style="color:var(--sub); margin:0;">Accumulators will be built here using verified matches.</p>
       </div>
     </div>
   </div>
@@ -135,55 +141,38 @@
   <div id="jackpotView" style="display:none;">
     <div class="grid">
       <div class="card">
-        <h2>1. Jackpot Match Sheet Input</h2>
+        <h2>1. Jackpot Roster Feed</h2>
         <div class="drop-zone" onclick="document.getElementById('fileJackpot').click()">
-          <span id="ocrJpText">📷 Upload Jackpot Screenshot (Betika, SportPesa, Mozzart, Odi)</span>
-          <input type="file" id="fileJackpot" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'jp')">
+          <span id="ocrJpText">📷 Drop Jackpot Screenshot</span>
+          <input type="file" id="fileJackpot" accept="image/*" style="display:none" onchange="runOCR(this.files[0], 'jp')">
         </div>
-        <textarea id="jackpotInput" placeholder="Paste jackpot match rows or OCR text here..."></textarea>
+        <textarea id="jackpotInput" placeholder="Paste jackpot match rows here..."></textarea>
+        <button onclick="loadDemo10()" style="background:#1e293b; border:1px solid #3b82f6; color:#93c5fd; font-size:0.75rem; padding:6px;">⚡ Auto-Fill Your 10 Odibets Matches</button>
 
-        <label style="font-size:0.72rem; color:var(--sub); margin-top:6px; display:block;">Instant Load Presets (All Matches Included):</label>
-        <div class="btn-row">
-          <button type="button" class="demo-btn" onclick="fillJackpotPreset('odibets')">⚡ Odibets (10/10 Games)</button>
-          <button type="button" class="demo-btn" onclick="fillJackpotPreset('betika')">⚡ Betika (15/15 Games)</button>
-          <button type="button" class="demo-btn" onclick="fillJackpotPreset('sportpesa')">⚡ SportPesa (17/17 Games)</button>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
-          <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Jackpot Size Target</label>
-            <select id="jackpotPreset">
-              <option value="10">Odibets (10 Games)</option>
-              <option value="15" selected>Betika Must-Be-Won (15 Games)</option>
-              <option value="16">Mozzart Grand (16 Games)</option>
-              <option value="17">SportPesa Mega (17 Games)</option>
-            </select>
-          </div>
-          <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Max Double-Chance Covers</label>
-            <input type="number" id="maxDoubles" value="4" min="1" max="7">
-          </div>
+        <div style="margin-top:8px;">
+          <label style="font-size:0.72rem; color:var(--sub);">Max Allowed Double Chances:</label>
+          <input type="number" id="maxDoubles" value="4" min="1" max="6">
         </div>
 
-        <button onclick="executeJackpotEngine()" style="background:var(--accent);">Evaluate All Matches & Generate Permutations</button>
+        <button onclick="dispatchPipeline('jackpot')" style="background:var(--accent);">Evaluate All Matches (Strict 1X2 Base Line)</button>
       </div>
 
       <div class="card">
-        <h2>2. Jackpot Complete Roster Analysis</h2>
+        <h2>2. Verified Roster (100% Matches Covered In Exact Order)</h2>
         <div style="overflow-y:auto; max-height:450px;">
           <table id="jackpotTable">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Home Team vs Away Team</th>
-                <th>Predicted Winner (Banker)</th>
-                <th>Tactical Double Cover</th>
-                <th>Win Prob</th>
+                <th>Verified Fixture</th>
+                <th>1X2 Consensus</th>
+                <th>Tactical Outcome</th>
+                <th>Ensemble Prob</th>
                 <th>Role</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting jackpot fixtures...</td></tr>
+              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting jackpot pipeline execution...</td></tr>
             </tbody>
           </table>
         </div>
@@ -191,9 +180,9 @@
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <h2>3. Ready-To-Place Combinatorial Wheeling Lines</h2>
-      <div id="wheelingOutput">
-        <p style="color:var(--sub); margin:0;">Click "Evaluate All Matches & Generate Permutations" to view complete ticket lines.</p>
+      <h2>3. Master 1X2 Ticket & Combinatorial Permutations</h2>
+      <div id="jackpotOutput">
+        <p style="color:var(--sub); margin:0;">Complete single line and permutation lines will be rendered here.</p>
       </div>
     </div>
   </div>
@@ -212,303 +201,109 @@
       }
     }
 
-    // BISECTION SHIN DE-BIASING SOLVER
-    function solveShin(oH, oD, oA) {
-      let p1 = 1 / Math.max(1.01, oH), pX = 1 / Math.max(1.01, oD), p2 = 1 / Math.max(1.01, oA);
-      let beta = p1 + pX + p2;
-      let low = 0.0, high = 0.49, z = 0.02;
-
-      for (let i = 0; i < 24; i++) {
-        z = (low + high) / 2.0;
-        let test = (
-          Math.sqrt(z*z + 4*(1-z)*(p1/beta)) +
-          Math.sqrt(z*z + 4*(1-z)*(pX/beta)) +
-          Math.sqrt(z*z + 4*(1-z)*(p2/beta))
-        ) - (2.0 - z);
-        if (test > 0) low = z; else high = z;
-      }
-
-      let h = (Math.sqrt(z*z + 4*(1-z)*(p1/beta)) - z) / (2*(1-z));
-      let d = (Math.sqrt(z*z + 4*(1-z)*(pX/beta)) - z) / (2*(1-z));
-      let a = (Math.sqrt(z*z + 4*(1-z)*(p2/beta)) - z) / (2*(1-z));
-      let sum = h + d + a;
-      return { pH: h / sum, pD: d / sum, pA: a / sum, z: z };
+    function logMsg(msg) {
+      let b = document.getElementById('agentLogs');
+      b.innerHTML += `<div>&gt; ${msg}</div>`;
+      b.scrollTop = b.scrollHeight;
     }
 
-    // SANITIZATION AND SECONDARY MARKET FIREWALL
-    function cleanRawText(raw) {
-      let lines = raw.split('\n').map(l => l.replace(/[\u2013\u2014]/g, '-').trim()).filter(l => l.length > 0);
-      let clean = [];
+    async function testBackendConnection() {
+      let backend = document.getElementById('backendUrl').value.replace(/\/$/, "");
+      let dot = document.getElementById('pingDot');
+      logMsg(`Pinging backend: ${backend}/health ...`);
 
-      for (let l of lines) {
-        // Discard browser navigation, OS chrome, bookmark junk
-        if (/(odibets\.com|sportpesa\.com|betika\.com|mozzartbet|SafariTour|Dashboard|Netflix|YouTube|PayPal|Gmail|LinkedIn|Inbox|admin@|Ask Gemini)/i.test(l)) continue;
-        if (/(Promotion|Promatians|Prediction Market|Livescore|Casino|DEPOSIT|How to play|Markets|Results|correct precicions|EE Wo)/i.test(l)) continue;
-        
-        // Discard secondary markets and fake match text
-        if (/^(Over\/Under|UNDER|OVER|Draw no bet|Both Teams|Full Time|3 Way|Double Chance)/i.test(l)) continue;
-        if (/(Over\/Under|UNDER\s+\d|OVER\s+\d|Draw no bet)/i.test(l)) continue;
-        if (/^r\/Under/i.test(l)) continue; // Kills "r/Under" scrap artifacts
-        if (/^(\+?\d+\s+more|\+\d+\s+Markets|🔥\s*HOT|#\d+|ID:\s*\d+|Teams)$/i.test(l)) continue;
-        if (/^\d{1,2}[\/\.]\d{1,2}(?:\/\d{2,4})?(\s*,\s*|\s*-\s*|\s+)\d{1,2}:\d{2}/.test(l)) continue;
-        if (/^\d{1,2}:\d{2}(h)?$/.test(l)) continue;
-
-        clean.push(l);
-      }
-      return clean;
-    }
-
-    // EXTRACT ALL MATCHES WITH TEAM NAMES AND WHO WILL WIN
-    function parseAllMatches(raw) {
-      if (!raw || !raw.trim()) return [];
-
-      let cleanLines = cleanRawText(raw);
-      let matches = [];
-      let i = 0;
-
-      let isStrictOdd = v => {
-        if (/[a-zA-Z]/.test(v)) return false;
-        let num = parseFloat(v);
-        return !isNaN(num) && num >= 1.05 && num <= 40.0 && /^\d+(\.\d+)?$/.test(v.trim());
-      };
-
-      while (i < cleanLines.length) {
-        let l = cleanLines[i];
-
-        // Case 1: Triple Odds on single line (e.g. "3.00 3.60 2.19" or "1 3.00 X 3.60 2 2.19")
-        let tokens = l.split(/\s+/).filter(t => !/^(1|X|2|HOME|DRAW|AWAY)$/i.test(t));
-        if (tokens.length === 3 && tokens.every(t => isStrictOdd(t))) {
-          let oH = parseFloat(tokens[0]), oD = parseFloat(tokens[1]), oA = parseFloat(tokens[2]);
-          let t1 = cleanLines[i-2] || "Home Team", t2 = cleanLines[i-1] || "Away Team";
-          
-          let m = buildMatchObject(matches.length + 1, t1, t2, oH, oD, oA);
-          if (m) matches.push(m);
-          i++;
-          continue;
-        }
-
-        // Case 2: Odds split across individual lines
-        if (isStrictOdd(cleanLines[i])) {
-          // Look forward for 3 odds
-          let oList = [];
-          let lookAhead = i;
-          while (lookAhead < cleanLines.length && oList.length < 3) {
-            let item = cleanLines[lookAhead];
-            if (isStrictOdd(item)) {
-              oList.push(parseFloat(item));
-            } else if (!/^(1|X|2|HOME|DRAW|AWAY)$/i.test(item)) {
-              break;
-            }
-            lookAhead++;
-          }
-
-          if (oList.length === 3) {
-            // Team names precede the first odd
-            let t1 = cleanLines[i-2] || cleanLines[i-3] || `Match #${matches.length + 1} Home`;
-            let t2 = cleanLines[i-1] || `Match #${matches.length + 1} Away`;
-            
-            let m = buildMatchObject(matches.length + 1, t1, t2, oList[0], oList[1], oList[2]);
-            if (m) matches.push(m);
-            i = lookAhead;
-            continue;
-          }
-        }
-
-        // Case 3: Labeled lines (Sevilla FC 1.98 ... Draw 3.35 ... Valencia 4.20)
-        if (i < cleanLines.length - 2) {
-          let num1 = parseFloat(cleanLines[i+1]);
-          let num2 = parseFloat(cleanLines[i+3]);
-          let num3 = parseFloat(cleanLines[i+5]);
-          if (!isNaN(num1) && !isNaN(num2) && !isNaN(num3) && num1 >= 1.05 && num2 >= 1.05 && num3 >= 1.05) {
-            let t1 = cleanLines[i], t2 = cleanLines[i+4];
-            let m = buildMatchObject(matches.length + 1, t1, t2, num1, num2, num3);
-            if (m) {
-              matches.push(m);
-              i += 6;
-              continue;
-            }
-          }
-        }
-
-        i++;
-      }
-
-      // Safety Fallback: Triplet decimal scanner if line grouping was disjointed
-      if (matches.length === 0) {
-        let allDecimals = raw.match(/\b[1-9]\d*(?:\.\d{1,2})\b/g);
-        if (allDecimals && allDecimals.length >= 3) {
-          for (let k = 0; k <= allDecimals.length - 3; k += 3) {
-            let o1 = parseFloat(allDecimals[k]), o2 = parseFloat(allDecimals[k+1]), o3 = parseFloat(allDecimals[k+2]);
-            if (o1 >= 1.05 && o2 >= 1.05 && o3 >= 1.05) {
-              let m = buildMatchObject(matches.length + 1, `Team #${matches.length + 1} A`, `Team #${matches.length + 1} B`, o1, o2, o3);
-              if (m) matches.push(m);
-            }
-          }
-        }
-      }
-
-      return matches;
-    }
-
-    // CONSTRUCT ACCURATE PREDICTED WINNER OBJECT
-    function buildMatchObject(id, rawHome, rawAway, oH, oD, oA) {
-      let home = rawHome.replace(/^\d+[\.\s\-]+/, '').trim();
-      let away = rawAway.replace(/^\d+[\.\s\-]+/, '').trim();
-
-      // Guard against secondary market artifacts
-      if (/^(OVER|UNDER|Draw no bet|Full Time)/i.test(home) || /^(OVER|UNDER|Draw no bet|Full Time)/i.test(away)) {
-        return null;
-      }
-
-      let shin = solveShin(oH, oD, oA);
-
-      // Synthetic double chance pricing
-      let dc1X = 1 / ((1/oH) + (1/oD));
-      let dcX2 = 1 / ((1/oD) + (1/oA));
-      let dc12 = 1 / ((1/oH) + (1/oA));
-
-      let predictedWinner = "";
-      let winningPick = "";
-      let winningOdds = 0;
-      let winningProb = 0;
-      let hedgeCover = "";
-      let hedgeCode = "";
-
-      // Decision Engine for Who Will Win
-      if (shin.pH >= 0.45 && shin.pH >= shin.pA) {
-        predictedWinner = `🏆 ${home} (Home Win)`;
-        winningPick = "1";
-        winningOdds = oH;
-        winningProb = shin.pH;
-        hedgeCover = `🛡️ ${home} or Draw (1X)`;
-        hedgeCode = "1X";
-      } else if (shin.pA >= 0.45 && shin.pA > shin.pH) {
-        predictedWinner = `🏆 ${away} (Away Win)`;
-        winningPick = "2";
-        winningOdds = oA;
-        winningProb = shin.pA;
-        hedgeCover = `🛡️ Draw or ${away} (X2)`;
-        hedgeCode = "X2";
-      } else {
-        // High-parity matches: assign the safer Double Chance as recommended winner
-        let p1X = shin.pH + shin.pD;
-        let pX2 = shin.pA + shin.pD;
-        if (p1X >= pX2) {
-          predictedWinner = `🛡️ ${home} or Draw (1X Safe)`;
-          winningPick = "1X";
-          winningOdds = dc1X;
-          winningProb = p1X;
-          hedgeCover = `⚡ ${home} or ${away} (12)`;
-          hedgeCode = "12";
+      try {
+        let res = await fetch(`${backend}/health`, { method: "GET" });
+        if (res.ok) {
+          let data = await res.json();
+          dot.className = "status-dot online";
+          logMsg(`<span style="color:var(--green);">Backend Online! Active Agents: ${data.active_agents} (Version ${data.version})</span>`);
         } else {
-          predictedWinner = `🛡️ Draw or ${away} (X2 Safe)`;
-          winningPick = "X2";
-          winningOdds = dcX2;
-          winningProb = pX2;
-          hedgeCover = `⚡ ${home} or ${away} (12)`;
-          hedgeCode = "12";
+          dot.className = "status-dot";
+          logMsg(`<span style="color:var(--red);">Backend returned HTTP ${res.status}. Check URL.</span>`);
         }
+      } catch (err) {
+        dot.className = "status-dot";
+        logMsg(`<span style="color:var(--red);">Connection failed. Ensure Render instance is awake. (${err.message})</span>`);
       }
-
-      return {
-        id,
-        fixture: `${home} vs ${away}`,
-        home, away,
-        oH, oD, oA,
-        predictedWinner,
-        winningPick,
-        winningOdds,
-        winningProb,
-        hedgeCover,
-        hedgeCode,
-        shin
-      };
     }
 
-    // MULTI-BET PIPELINE: ALL MATCHES DISPLAYED + ZERO OVERLAP ACCAS
-    function executeMultiEngine() {
-      let raw = document.getElementById('multiInput').value;
-      let matches = parseAllMatches(raw);
-      let targetMinOdds = parseFloat(document.getElementById('minTargetOdds').value) || 3.00;
+    async function dispatchPipeline(mode) {
+      let backend = document.getElementById('backendUrl').value.replace(/\/$/, "");
+      let rawText = mode === 'multi' ? document.getElementById('multiInput').value : document.getElementById('jackpotInput').value;
+      let minOdds = parseFloat(document.getElementById('minTargetOdds').value) || 3.00;
       let legSize = parseInt(document.getElementById('legsPerSlip').value) || 3;
       let bankroll = parseFloat(document.getElementById('userBankroll').value) || 5000;
+      let doubles = parseInt(document.getElementById('maxDoubles').value) || 4;
 
-      let tbody = document.querySelector('#matrixTable tbody');
-      tbody.innerHTML = '';
-
-      if (matches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--red);">No valid matches parsed. Check input or clean text.</td></tr>';
+      if (!rawText.trim()) {
+        alert("Please paste match fixtures first.");
         return;
       }
 
-      // 1. SHOW ALL MATCHES AND PREDICTED WINNERS
-      matches.forEach(m => {
-        let badge = m.winningProb >= 0.55 ? 'green' : 'yellow';
+      logMsg("Agent 1: Ingesting matches and enforcing exact sequential ordering...");
+      logMsg("Agent 2: Scraping ClubElo ratings, non-penalty xG & rest disparities...");
+      logMsg("Agent 3: Fitting Dixon-Coles Poisson & solving Shin 1993 equation...");
+      logMsg("Agent 4: Constructing uncapped orthogonal multi-bets & wheeling lines...");
+
+      try {
+        let res = await fetch(`${backend}/api/v2/execute_pipeline`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            raw_text: rawText,
+            target_min_odds: minOdds,
+            legs_per_slip: legSize,
+            bankroll: bankroll,
+            jackpot_doubles: doubles
+          })
+        });
+
+        if (!res.ok) {
+          let err = await res.json();
+          throw new Error(err.detail || "Pipeline processing error");
+        }
+
+        let data = await res.json();
+        logMsg(`Success: ${data.matches_count} matches verified in exact order.`);
+
+        if (mode === 'multi') {
+          renderMulti(data);
+        } else {
+          renderJackpot(data);
+        }
+      } catch (err) {
+        logMsg(`<span style="color:var(--red);">Error: ${err.message}</span>`);
+        alert(`Backend Connection Error: ${err.message}. Check backend URL and deployment status.`);
+      }
+    }
+
+    function renderMulti(data) {
+      let tbody = document.querySelector('#matrixTable tbody');
+      tbody.innerHTML = '';
+
+      data.analyzed_matches.forEach(m => {
         let tr = document.createElement('tr');
+        let eloGap = m.tactical_data.elo_home - m.tactical_data.elo_away;
         tr.innerHTML = `
-          <td><strong>${m.id}</strong></td>
+          <td><strong>${m.order}</strong></td>
           <td><strong>${m.fixture}</strong></td>
-          <td><span class="winner-tag">${m.predictedWinner}</span></td>
-          <td><strong>${m.winningOdds.toFixed(2)}</strong></td>
-          <td>${(m.winningProb * 100).toFixed(1)}%</td>
-          <td><span class="badge ${badge}">${m.winningProb >= 0.55 ? 'High Confidence' : 'Parity Watch'}</span></td>
+          <td><span class="winner-tag">${m.predicted_text}</span> @ ${m.market_odd.toFixed(2)}</td>
+          <td>${m.tactical_data.lambda_xg} - ${m.tactical_data.mu_xg}</td>
+          <td>${eloGap > 0 ? '+' + eloGap : eloGap} pts</td>
+          <td>${(m.model_prob * 100).toFixed(1)}%</td>
         `;
         tbody.appendChild(tr);
       });
 
-      // 2. BUILD NON-OVERLAPPING DISJOINT ACCAS
-      let pool = [...matches].sort((a, b) => b.winningProb - a.winningProb);
-      let slips = [];
-      let usedIds = new Set();
-
-      while (true) {
-        let available = pool.filter(m => !usedIds.has(m.id));
-        if (available.length < legSize) break;
-
-        let bestCombo = null;
-        let bestScore = -1;
-
-        function searchCombo(start, curr, currentOdds, currentProb) {
-          if (curr.length === legSize) {
-            if (currentOdds >= targetMinOdds && currentProb > bestScore) {
-              bestScore = currentProb;
-              bestCombo = [...curr];
-            }
-            return;
-          }
-          for (let i = start; i < available.length; i++) {
-            searchCombo(i + 1, [...curr, available[i]], currentOdds * available[i].winningOdds, currentProb * available[i].winningProb);
-          }
-        }
-        searchCombo(0, [], 1.0, 1.0);
-
-        if (!bestCombo) {
-          bestCombo = available.slice(0, legSize);
-        }
-
-        bestCombo.forEach(m => usedIds.add(m.id));
-        let cOdds = bestCombo.reduce((acc, l) => acc * l.winningOdds, 1.0);
-        let cProb = bestCombo.reduce((acc, l) => acc * l.winningProb, 1.0);
-        slips.push({ legs: bestCombo, odds: cOdds, prob: cProb });
-      }
-
       let container = document.getElementById('slipsContainer');
       container.innerHTML = '';
 
-      if (slips.length === 0) {
-        container.innerHTML = `<p style="color:var(--yellow);">Need at least ${legSize} matches to form an accumulator.</p>`;
-        return;
-      }
-
-      slips.forEach((s, idx) => {
-        let b = Math.max(0.01, s.odds - 1.0);
-        let kelly = Math.max(0.01, (b * s.prob - (1.0 - s.prob)) / b);
-        let recStake = Math.max(50, Math.round((bankroll * (kelly * 0.25)) / 10) * 10);
-
+      data.orthogonal_accumulators.forEach((s, idx) => {
         let legsHtml = s.legs.map(l => `
           <div class="slip-leg">
-            <span>⚽ <strong>${l.fixture}</strong> &bull; <span class="winner-tag">${l.predictedWinner}</span></span>
-            <span>@ ${l.winningOdds.toFixed(2)} (${(l.winningProb*100).toFixed(0)}% win)</span>
+            <span>⚽ <strong>Match #${l.order}: ${l.fixture}</strong> &bull; <span class="winner-tag">${l.predicted_text}</span></span>
+            <span>@ ${l.market_odd.toFixed(2)} (${(l.model_prob * 100).toFixed(0)}% win)</span>
           </div>
         `).join('');
 
@@ -516,8 +311,8 @@
         box.className = 'slip-box';
         box.innerHTML = `
           <div class="slip-head">
-            <span>🛡️ Independent Slip #${idx + 1} (Disjoint / 0% Shared Risk)</span>
-            <span>Total Odds: <strong style="color:#fff;">${s.odds.toFixed(2)}</strong> | Model Win Rate: <strong style="color:var(--green);">${(s.prob*100).toFixed(1)}%</strong> | Stake: <strong style="color:#60a5fa;">KSh ${recStake}</strong></span>
+            <span>🛡️ Independent Ticket #${idx + 1} (Disjoint / 0% Shared Risk)</span>
+            <span>Odds: <strong style="color:#fff;">${s.combined_odds.toFixed(2)}</strong> | Model Prob: <strong style="color:var(--green);">${s.combined_prob}%</strong> | Stake: <strong style="color:#60a5fa;">KSh ${s.recommended_stake}</strong></span>
           </div>
           ${legsHtml}
         `;
@@ -525,179 +320,73 @@
       });
     }
 
-    // JACKPOT PIPELINE: ALL MATCHES DISPLAYED + FULL WHEELING
-    function executeJackpotEngine() {
-      let raw = document.getElementById('jackpotInput').value;
-      let matches = parseAllMatches(raw);
+    function renderJackpot(data) {
       let tbody = document.querySelector('#jackpotTable tbody');
       tbody.innerHTML = '';
 
-      if (matches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--red);">No matches detected. Select an Instant Preset or clean paste text.</td></tr>';
-        return;
-      }
-
-      let maxDoubles = parseInt(document.getElementById('maxDoubles').value) || 4;
-      maxDoubles = Math.min(maxDoubles, matches.length);
-
-      // Rank games by outcome uncertainty for double chance covers
-      let sortedParity = [...matches].sort((a, b) => {
-        let pA = Math.abs(a.shin.pH - a.shin.pA);
-        let pB = Math.abs(b.shin.pH - b.shin.pA);
-        return pA - pB;
-      });
-
-      let hedgeSet = new Set(sortedParity.slice(0, maxDoubles).map(m => m.id));
-
-      // 1. SHOW ALL JACKPOT MATCHES (10/10, 15/15, etc.)
-      matches.forEach(m => {
-        let isHedge = hedgeSet.has(m.id);
+      data.analyzed_matches.forEach(m => {
+        let isBanker = m.role.includes("Banker");
         let tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${m.id}</strong></td>
+          <td><strong>${m.order}</strong></td>
           <td><strong>${m.fixture}</strong></td>
-          <td><span class="winner-tag">${m.predictedWinner}</span></td>
-          <td><span class="double-tag">${isHedge ? m.hedgeCover : '— (Locked Single)'}</span></td>
-          <td>${(m.winningProb * 100).toFixed(1)}%</td>
-          <td><span class="badge ${isHedge ? 'yellow' : 'green'}">${isHedge ? '⚡ Tactical Double' : '🔒 Core Banker'}</span></td>
+          <td><strong style="color:var(--green); font-size:0.95rem;">${m.consensus_pick}</strong></td>
+          <td><span class="winner-tag">${m.predicted_text}</span></td>
+          <td>${(m.model_prob * 100).toFixed(1)}%</td>
+          <td><span class="badge ${isBanker ? 'green' : 'yellow'}">${m.role}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
-      // 2. GENERATE COMPLETE PLAYABLE LINES
-      let wheelingDiv = document.getElementById('wheelingOutput');
-      let totalLines = Math.pow(2, maxDoubles);
-      let baseStake = 15; // KSh standard line stake
-      let totalCost = totalLines * baseStake;
+      let singleLine = data.analyzed_matches.map(m => m.consensus_pick).join(' - ');
+      let wheeling = data.jackpot_wheeling;
+      let allPerms = wheeling.lines.map((l, i) => `Line #${i+1}: ${l.join(' - ')}`).join('\n');
 
-      let allLines = [];
-      let displayLimit = Math.min(totalLines, 16);
-
-      for (let l = 0; l < totalLines; l++) {
-        let linePicks = [];
-        let dCount = 0;
-        matches.forEach(m => {
-          if (!hedgeSet.has(m.id)) {
-            linePicks.push(m.winningPick.charAt(0));
-          } else {
-            let bit = (l >> dCount) & 1;
-            let opt1 = m.hedgeCode.charAt(0);
-            let opt2 = m.hedgeCode.charAt(1) || 'X';
-            linePicks.push(bit === 0 ? opt1 : opt2);
-            dCount++;
-          }
-        });
-        allLines.push(linePicks);
-      }
-
-      let allLinesText = allLines.map((lp, i) => `Line #${i+1}: ${lp.join(' - ')}`).join('\n');
-
-      wheelingDiv.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <div>
-            <span>Generated: <strong>${totalLines} Unique Lines</strong> for <strong>All ${matches.length} Matches</strong> | Investment: <strong style="color:var(--green);">KSh ${totalCost.toLocaleString()}</strong> (@ KSh ${baseStake}/line)</span>
+      let outDiv = document.getElementById('jackpotOutput');
+      outDiv.innerHTML = `
+        <div style="background:#090f1d; border:1px solid #1e3a8a; border-radius:8px; padding:16px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="color:#93c5fd; font-size:0.9rem;">Master 1X2 Single Coupon (${data.matches_count} Matches in Exact Order)</strong>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText('${singleLine}'); alert('Master Coupon Copied!');">📋 Copy Master Line</button>
           </div>
-          <button class="copy-btn" onclick="copyTextToClipboard(\`${allLinesText.replace(/`/g, '')}\`, 'All Lines Copied!')">📋 Copy All Lines</button>
+          <div style="font-family:monospace; font-size:1.1rem; color:#10b981; font-weight:bold;">
+            ${singleLine}
+          </div>
         </div>
-        <div id="linesGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:10px;"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span>Generated Permutations: <strong>${wheeling.total_lines} Unique Lines</strong> | Total Investment: <strong style="color:var(--green);">KSh ${wheeling.total_cost_ksh.toLocaleString()}</strong> (@ KSh 15/line)</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${allPerms}\`); alert('All Lines Copied!');">📋 Copy All Permutations</button>
+        </div>
       `;
-
-      let grid = document.getElementById('linesGrid');
-      for (let i = 0; i < displayLimit; i++) {
-        let card = document.createElement('div');
-        card.style = "background:#090f1d; border:1px solid #1e293b; border-radius:6px; padding:10px;";
-        let lineStr = allLines[i].join(' &bull; ');
-        let rawStr = allLines[i].join(' - ');
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:#93c5fd; font-size:0.8rem;">Line #${i + 1} (${matches.length} Picks)</strong>
-            <button class="copy-btn" onclick="copyTextToClipboard('${rawStr}', 'Line #${i+1} Copied!')">Copy</button>
-          </div>
-          <div style="font-family:monospace; font-size:0.85rem; color:#f8fafc; word-break:break-all;">
-            ${lineStr}
-          </div>
-        `;
-        grid.appendChild(card);
-      }
     }
 
-    function copyTextToClipboard(text, msg) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => alert(msg)).catch(() => fallbackCopy(text, msg));
-      } else {
-        fallbackCopy(text, msg);
-      }
+    function loadDemo10() {
+      document.getElementById('jackpotInput').value = `SV Darmstadt 98\nArminia Bielefeld\n3.00\n3.60\n2.18\n\n1 FC Nuremberg\nHannover 96\n2.29\n3.85\n2.70\n\nFC Viktoria Cologne\nHansa Rostock\n2.85\n3.55\n2.30\n\nMontpellier HSC\nPau FC\n1.80\n3.50\n4.40\n\nDijon FCO\nStade Lavallois MFC\n1.98\n3.45\n3.60\n\nUnion Berlin\nSchalke 04\n2.35\n3.65\n3.00\n\nKidderminster Harriers FC\nHartlepool United\n2.22\n3.40\n2.90\n\nStade Rennais FC\nOlympique Marseille\n2.07\n3.95\n3.40\n\nVenezia FC\nACF Fiorentina\n2.85\n3.55\n2.50\n\nSevilla FC\nValencia CF\n1.92\n3.50\n4.40`;
     }
 
-    function fallbackCopy(text, msg) {
-      let ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      alert(msg);
-    }
-
-    // PRESET LOADERS FOR VERIFICATION
-    function fillJackpotPreset(type) {
-      let target = document.getElementById('jackpotInput');
-      let select = document.getElementById('jackpotPreset');
-
-      if (type === 'odibets') {
-        select.value = "10";
-        target.value = `SV Darmstadt 98\nArminia Bielefeld\n3.00 3.60 2.19\n\n1 FC Nuremberg\nHannover 96\n2.35 3.80 2.60\n\nFC Viktoria Cologne\nHansa Rostock\n2.85 3.55 2.30\n\nMontpellier HSC\nPau FC\n1.80 3.50 4.40\n\nDijon FCO\nStade Lavallois MFC\n1.98 3.50 3.60\n\nUnion Berlin\nSchalke 04\n2.37 3.65 2.95\n\nKidderminster Harriers FC\nHartlepool United\n2.24 3.35 2.85\n\nStade Rennais FC\nOlympique Marseille\n2.05 4.10 3.40\n\nVenezia FC\nACF Fiorentina\n2.95 3.50 2.47\n\nSevilla FC\nValencia CF\n1.93 3.50 4.40`;
-      } else if (type === 'betika') {
-        select.value = "15";
-        target.value = `Hoffenheim\nStuttgart\n2.46 4.00 2.65\n\nMainz\nEintracht Fr\n2.06 4.00 3.40\n\nBournemouth\nBrentford\n2.55 3.65 2.75\n\nNacional\nFc Alverca Sad\n2.65 3.30 2.75\n\nStrasbourg\nMonaco\n3.10 3.75 2.26\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14`;
-      } else if (type === 'sportpesa') {
-        select.value = "17";
-        target.value = `Lazio Roma\nAC Milan\n3.25 3.20 2.32\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14\n\nZulte Waregem\nCharleroi\n2.60 3.45 2.60\n\nCastellon\nDeportivo La Coruna\n2.50 2.90 2.40\n\nArouca\nSanta Clara\n2.60 3.15 2.80\n\nLa Louviere\nKortrijk\n2.41 3.25 2.90\n\nReal Sociedad\nAtletico Madrid\n2.90 3.55 2.41\n\nTenerife\nLeganes\n2.31 2.95 3.25`;
-      }
-      executeJackpotEngine();
-    }
-
-    // OCR ENGINE
-    async function processUploadedImage(file, mode) {
+    async function runOCR(file, mode) {
       if (!file) return;
       let label = mode === 'multi' ? document.getElementById('ocrMultiText') : document.getElementById('ocrJpText');
       let targetInput = mode === 'multi' ? document.getElementById('multiInput') : document.getElementById('jackpotInput');
 
-      label.innerText = "⏳ Processing image through OCR...";
-
-      let img = new Image();
-      img.src = URL.createObjectURL(file);
-      await img.decode();
-
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-
-      let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      let d = imgData.data;
-
-      for (let i = 0; i < d.length; i += 4) {
-        let gray = (d[i] * 0.299) + (d[i+1] * 0.587) + (d[i+2] * 0.114);
-        let inverted = 255 - gray;
-        let thresh = inverted > 130 ? 255 : 0;
-        d[i] = thresh; d[i+1] = thresh; d[i+2] = thresh;
-      }
-      ctx.putImageData(imgData, 0, 0);
-
+      label.innerText = "⏳ Running OCR...";
       try {
-        let blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
         const worker = await Tesseract.createWorker('eng');
-        const ret = await worker.recognize(blob);
+        const ret = await worker.recognize(file);
         await worker.terminate();
-        label.innerText = "✅ Extraction Complete!";
-        targetInput.value += "\n" + ret.data.text;
-        if (mode === 'multi') executeMultiEngine(); else executeJackpotEngine();
+        label.innerText = "✅ OCR Complete!";
+        targetInput.value = ret.data.text;
+        dispatchPipeline(mode);
       } catch (err) {
         label.innerText = "❌ OCR Failed. Please paste text.";
       }
     }
+
+    // Auto-test connection on initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(testBackendConnection, 1200);
+    });
   </script>
 </body>
 </html>
