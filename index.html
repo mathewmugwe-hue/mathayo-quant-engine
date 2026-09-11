@@ -26,7 +26,7 @@
     h2 { margin: 0 0 12px; font-size: 0.8rem; color: var(--sub); text-transform: uppercase; letter-spacing: 0.05em; }
 
     textarea, input, select, button { width: 100%; background: var(--panel); border: 1px solid var(--border); color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 0.82rem; }
-    textarea { height: 160px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
+    textarea { height: 160px; font-family: ui-monospace, monospace; resize: vertical; }
     button { background: var(--accent); font-weight: 700; cursor: pointer; border: none; margin-top: 10px; padding: 11px; transition: 0.2s; }
     button:hover { background: var(--accent-hover); }
 
@@ -37,7 +37,7 @@
     th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
     th { background: #0b1120; color: var(--sub); }
 
-    .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; }
+    .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; display: inline-block; }
     .badge.green { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid var(--green); }
     .badge.yellow { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid var(--yellow); }
 
@@ -45,9 +45,10 @@
     .slip-head { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; color: #93c5fd; }
     .slip-leg { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.8rem; border-bottom: 1px dashed #1e293b; }
     .slip-leg:last-child { border-bottom: none; }
-    .copy-btn { width: auto; padding: 4px 10px; margin-top: 0; background: #1e293b; font-size: 0.75rem; border: 1px solid #334155; }
+    .copy-btn { width: auto; padding: 5px 12px; margin-top: 0; background: #1e293b; font-size: 0.75rem; border: 1px solid #334155; }
     .copy-btn:hover { background: #334155; }
-    .demo-btn { background: #1e293b; color: #93c5fd; margin-top: 6px; font-size: 0.75rem; padding: 6px; border: 1px dashed #3b82f6; }
+    .btn-row { display: flex; gap: 6px; margin-top: 6px; }
+    .demo-btn { background: #132238; color: #93c5fd; font-size: 0.72rem; padding: 6px; border: 1px solid #1e3a8a; margin-top: 0; }
   </style>
 </head>
 <body>
@@ -55,7 +56,7 @@
   <div class="header">
     <div>
       <h1>Mathayo Pro 2026 Engine</h1>
-      <p>Bivariate Dixon-Coles • Shin De-Biasing • Orthogonal Slip Builder • Combinatorial Wheeling</p>
+      <p>Bivariate Dixon-Coles • Bisection Shin Solver • Strictly Orthogonal Accas • Combinatorial Wheeling</p>
     </div>
   </div>
 
@@ -73,7 +74,7 @@
           <span id="ocrMultiText">📷 Upload Screenshot or Paste (Ctrl+V)</span>
           <input type="file" id="fileMulti" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'multi')">
         </div>
-        <textarea id="multiInput" placeholder="Paste matches or OCR output here..."></textarea>
+        <textarea id="multiInput" placeholder="Paste match roster and odds here..."></textarea>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:8px;">
           <div>
@@ -107,7 +108,7 @@
                 <th>Selection</th>
                 <th>Odds</th>
                 <th>Shin Win Prob</th>
-                <th>Safety</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -119,9 +120,9 @@
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <h2>3. Independent Slips (Guaranteed Zero Leg Duplication)</h2>
+      <h2>3. Independent Slips (Guaranteed Zero Duplicate Legs)</h2>
       <div id="slipsContainer">
-        <p style="color:var(--sub); margin:0;">Each accumulator below will have strictly unique matches.</p>
+        <p style="color:var(--sub); margin:0;">Accumulators will appear here. No match will ever be repeated across multiple slips.</p>
       </div>
     </div>
   </div>
@@ -136,14 +137,19 @@
           <input type="file" id="fileJackpot" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'jp')">
         </div>
         <textarea id="jackpotInput" placeholder="Paste jackpot match rows or OCR text here..."></textarea>
-        
-        <button class="demo-btn" onclick="fillOdibetsDemo()">Load Your Odibets Screenshot Data (Instant Fill)</button>
+
+        <label style="font-size:0.72rem; color:var(--sub); margin-top:6px; display:block;">Quick-Test Preset Data:</label>
+        <div class="btn-row">
+          <button type="button" class="demo-btn" onclick="fillPreset('odibets')">⚡ Odibets 10</button>
+          <button type="button" class="demo-btn" onclick="fillPreset('betika')">⚡ Betika 15</button>
+          <button type="button" class="demo-btn" onclick="fillPreset('sportpesa')">⚡ SportPesa 17</button>
+        </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
           <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Jackpot Preset</label>
+            <label style="font-size:0.72rem; color:var(--sub);">Jackpot Format</label>
             <select id="jackpotPreset">
-              <option value="10" selected>Odibets (10 Games)</option>
+              <option value="10">Odibets (10 Games)</option>
               <option value="15">Betika Must-Be-Won (15 Games)</option>
               <option value="16">Mozzart Grand (16 Games)</option>
               <option value="17">SportPesa Mega (17 Games)</option>
@@ -151,7 +157,7 @@
           </div>
           <div>
             <label style="font-size:0.72rem; color:var(--sub);">Max Allowed Double Chances</label>
-            <input type="number" id="maxDoubles" value="4" min="1" max="8">
+            <input type="number" id="maxDoubles" value="4" min="1" max="7">
           </div>
         </div>
 
@@ -201,230 +207,427 @@
       }
     }
 
-    // ROBUST BISECTION SHIN SOLVER
+    // BISECTION SHIN SOLVER (No divergence, exact zero-point convergence)
     function solveShin(oH, oD, oA) {
       let p1 = 1 / oH, pX = 1 / oD, p2 = 1 / oA;
-      let sumInv = p1 + pX + p2;
-      let low = 0.0, high = 0.45, z = 0.02;
+      let beta = p1 + pX + p2;
+      let low = 0.0, high = 0.49, z = 0.02;
 
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < 24; i++) {
         z = (low + high) / 2.0;
-        let testVal = (
-          Math.sqrt(z*z + 4*(1-z)*(p1/sumInv)) +
-          Math.sqrt(z*z + 4*(1-z)*(pX/sumInv)) +
-          Math.sqrt(z*z + 4*(1-z)*(p2/sumInv))
+        let test = (
+          Math.sqrt(z*z + 4*(1-z)*(p1/beta)) +
+          Math.sqrt(z*z + 4*(1-z)*(pX/beta)) +
+          Math.sqrt(z*z + 4*(1-z)*(p2/beta))
         ) - (2.0 - z);
-        if (testVal > 0) low = z; else high = z;
+        if (test > 0) low = z; else high = z;
       }
 
-      let h = (Math.sqrt(z*z + 4*(1-z)*(p1/sumInv)) - z) / (2*(1-z));
-      let d = (Math.sqrt(z*z + 4*(1-z)*(pX/sumInv)) - z) / (2*(1-z));
-      let a = (Math.sqrt(z*z + 4*(1-z)*(p2/sumInv)) - z) / (2*(1-z));
-      let s = h + d + a;
-      return { pH: h / s, pD: d / s, pA: a / s, z };
+      let h = (Math.sqrt(z*z + 4*(1-z)*(p1/beta)) - z) / (2*(1-z));
+      let d = (Math.sqrt(z*z + 4*(1-z)*(pX/beta)) - z) / (2*(1-z));
+      let a = (Math.sqrt(z*z + 4*(1-z)*(p2/beta)) - z) / (2*(1-z));
+      let sum = h + d + a;
+      return { pH: h / sum, pD: d / sum, pA: a / sum, z: z };
     }
 
-    // MULTI-STREAM ADAPTIVE PARSER (Extracts odds & teams regardless of labels like 1, X, 2, dates, times)
-    function parseAnySportsbookText(raw) {
+    // UNIVERSAL PARSER (Extracts odds triplets and teams cleanly from raw text)
+    function parseUniversalOddsText(raw) {
+      if (!raw || !raw.trim()) return [];
+
       let lines = raw.split('\n')
         .map(l => l.replace(/[\u2013\u2014]/g, '-').trim())
         .filter(l => l.length > 0);
 
-      // Clean lines of labels and UI noise
-      let filtered = [];
+      // Clean lines of labels, timestamps, and pass buttons
+      let clean = [];
       for (let l of lines) {
-        // Skip dates, timestamps, leagues, and pass-buttons
         if (/^\d{1,2}[\/\.]\d{1,2}(\/\d{2,4})?(\s*-\s*\d{1,2}:\d{2})?/.test(l)) continue;
-        if (/^\d{1,2}\s+(Sep|Oct|Nov|Dec|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug)(\s*[\/\-]\s*\d{1,2}:\d{2})?/i.test(l)) continue;
+        if (/^\d{1,2}\s+(Sep|Oct|Nov|Dec|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug)/i.test(l)) continue;
         if (/^\d{1,2}:\d{2}(h)?$/.test(l)) continue;
-        if (/^(Tomorrow|Today|Starts in|Apply Pass|Quick Pick|Remove all|Share|Place Bet)/i.test(l)) continue;
-        if (/^(HOME|DRAW|AWAY|Odds|Markets|Results|How to play)/i.test(l)) continue;
-        if (/^(1|X|2|1X|X2|12)$/i.test(l)) continue; // Drop lone market indicators
+        if (/^(Tomorrow|Today|Starts in|Apply Pass|Quick Pick|Remove all|Share|Place Bet|Total|Stake)/i.test(l)) continue;
+        if (/^(HOME|DRAW|AWAY|KSh|Odds|Markets|Results|How to play)/i.test(l)) continue;
+        if (/^(1|X|2|1X|X2|12)$/i.test(l)) continue;
         if (/^\+\d+\s+more$/i.test(l)) continue;
-        filtered.push(l);
+        clean.push(l);
       }
 
+      // Extract all pure decimal numbers that represent odds
+      let tokens = [];
+      let isStrictOdd = str => {
+        if (/[a-zA-Z]/.test(str)) return false; // Must contain NO letters
+        let val = parseFloat(str);
+        return !isNaN(val) && val >= 1.05 && val <= 45.0 && /^\d+(\.\d+)?$/.test(str.trim());
+      };
+
+      for (let item of clean) {
+        let parts = item.split(/\s+/);
+        let allPartsOdds = parts.length > 0 && parts.every(p => isStrictOdd(p));
+        if (allPartsOdds && parts.length === 3) {
+          tokens.push({ type: 'triplet', oH: parseFloat(parts[0]), oD: parseFloat(parts[1]), oA: parseFloat(parts[2]) });
+        } else if (isStrictOdd(item)) {
+          tokens.push({ type: 'odd', val: parseFloat(item) });
+        } else {
+          tokens.push({ type: 'text', val: item });
+        }
+      }
+
+      // Group odds into [oH, oD, oA] triplets and pair with teams
       let matches = [];
-      let isNum = v => !isNaN(parseFloat(v)) && parseFloat(v) >= 1.02 && parseFloat(v) <= 35.0;
+      let pendingText = [];
+      let pendingOdds = [];
 
-      let idx = 0;
-      while (idx < filtered.length) {
-        // Check if next elements contain 3 odds
-        let o1 = null, o2 = null, o3 = null;
-        let homeTeam = "Home", awayTeam = "Away";
-
-        // Find three consecutive numbers in the stream
-        if (isNum(filtered[idx]) && isNum(filtered[idx+1]) && isNum(filtered[idx+2])) {
-          o1 = parseFloat(filtered[idx]);
-          o2 = parseFloat(filtered[idx+1]);
-          o3 = parseFloat(filtered[idx+2]);
-
-          let tCandidate1 = filtered[idx-2];
-          let tCandidate2 = filtered[idx-1];
-
-          if (tCandidate1 && tCandidate2 && !isNum(tCandidate1) && !isNum(tCandidate2)) {
-            homeTeam = tCandidate1.replace(/^\d+[\.\s\-]+/, '').trim();
-            awayTeam = tCandidate2.replace(/^\d+[\.\s\-]+/, '').trim();
-          }
-
-          idx += 3;
-        } else if (!isNum(filtered[idx]) && !isNum(filtered[idx+1])) {
-          // Alternative pattern: Team1 \n Team2 \n o1 \n o2 \n o3
-          if (filtered[idx+2] && isNum(filtered[idx+2]) && filtered[idx+3] && isNum(filtered[idx+3]) && filtered[idx+4] && isNum(filtered[idx+4])) {
-            homeTeam = filtered[idx].replace(/^\d+[\.\s\-]+/, '').trim();
-            awayTeam = filtered[idx+1].replace(/^\d+[\.\s\-]+/, '').trim();
-            o1 = parseFloat(filtered[idx+2]);
-            o2 = parseFloat(filtered[idx+3]);
-            o3 = parseFloat(filtered[idx+4]);
-            idx += 5;
+      function commitMatch(o1, o2, o3) {
+        let home = "Home Team", away = "Away Team";
+        let filteredText = pendingText.filter(t => !/^\d+[\.\s\-]+$/.test(t));
+        
+        if (filteredText.length >= 2) {
+          home = filteredText[filteredText.length - 2].replace(/^\d+[\.\s\-]+/, '').trim();
+          away = filteredText[filteredText.length - 1].replace(/^\d+[\.\s\-]+/, '').trim();
+        } else if (filteredText.length === 1) {
+          let s = filteredText[0].replace(/^\d+[\.\s\-]+/, '').trim();
+          if (s.includes(" vs ")) {
+            let split = s.split(" vs ");
+            home = split[0].trim(); away = split[1].trim();
+          } else if (s.includes(" - ")) {
+            let split = s.split(" - ");
+            home = split[0].trim(); away = split[1].trim();
           } else {
-            idx++;
-            continue;
+            home = s; away = "Opponent";
           }
         } else {
-          idx++;
-          continue;
+          home = `Match #${matches.length + 1} Home`;
+          away = `Match #${matches.length + 1} Away`;
         }
 
-        if (o1 && o2 && o3) {
-          let s = solveShin(o1, o2, o3);
+        let shin = solveShin(o1, o2, o3);
+        let dc1X = 1 / ((1/o1) + (1/oD_valid(o2)));
+        let dcX2 = 1 / ((1/oD_valid(o2)) + (1/o3));
+        let dc12 = 1 / ((1/o1) + (1/o3));
 
-          // Synthetic double chances
-          let dc1X = 1 / ((1/o1) + (1/o2));
-          let dcX2 = 1 / ((1/o2) + (1/o3));
-          let dc12 = 1 / ((1/o1) + (1/o3));
+        let pick = "", pickCode = "1", odds = o1, prob = shin.pH;
+        let hedge = "", hedgeCode = "1X", hedgeOdds = dc1X;
 
-          let bestPick = "", bestOdds = 0, bestProb = 0, hedgePick = "", hedgeOdds = 0;
-
-          if (s.pH >= s.pA && s.pH >= 0.44) {
-            bestPick = `${homeTeam} (1)`;
-            bestOdds = o1;
-            bestProb = s.pH;
-            hedgePick = `${homeTeam} or Draw (1X)`;
-            hedgeOdds = dc1X;
-          } else if (s.pA > s.pH && s.pA >= 0.44) {
-            bestPick = `${awayTeam} (2)`;
-            bestOdds = o3;
-            bestProb = s.pA;
-            hedgePick = `Draw or ${awayTeam} (X2)`;
-            hedgeOdds = dcX2;
+        if (shin.pH >= shin.pA && shin.pH >= 0.44) {
+          pick = `${home} (1)`; pickCode = "1"; odds = o1; prob = shin.pH;
+          hedge = `${home} or Draw (1X)`; hedgeCode = "1X"; hedgeOdds = dc1X;
+        } else if (shin.pA > shin.pH && shin.pA >= 0.44) {
+          pick = `${away} (2)`; pickCode = "2"; odds = o3; prob = shin.pA;
+          hedge = `Draw or ${away} (X2)`; hedgeCode = "X2"; hedgeOdds = dcX2;
+        } else {
+          let p1X = shin.pH + shin.pD;
+          let pX2 = shin.pA + shin.pD;
+          if (p1X >= pX2) {
+            pick = `${home} or Draw (1X)`; pickCode = "1"; odds = dc1X; prob = p1X;
+            hedge = `${home} or ${away} (12)`; hedgeCode = "12"; hedgeOdds = dc12;
           } else {
-            let p1X = s.pH + s.pD;
-            let pX2 = s.pA + s.pD;
-            if (p1X >= pX2) {
-              bestPick = `${homeTeam} or Draw (1X)`;
-              bestOdds = dc1X;
-              bestProb = p1X;
-              hedgePick = `${homeTeam} or ${awayTeam} (12)`;
-              hedgeOdds = dc12;
-            } else {
-              bestPick = `Draw or ${awayTeam} (X2)`;
-              bestOdds = dcX2;
-              bestProb = pX2;
-              hedgePick = `${homeTeam} or ${awayTeam} (12)`;
-              hedgeOdds = dc12;
-            }
+            pick = `Draw or ${away} (X2)`; pickCode = "2"; odds = dcX2; prob = pX2;
+            hedge = `${home} or ${away} (12)`; hedgeCode = "12"; hedgeOdds = dc12;
           }
+        }
 
-          matches.push({
-            id: matches.length + 1,
-            fixture: `${homeTeam} vs ${awayTeam}`,
-            homeTeam, awayTeam,
-            oH: o1, oD: o2, oA: o3,
-            bestPick, bestOdds, bestProb,
-            hedgePick, hedgeOdds,
-            shin: s
-          });
+        matches.push({
+          id: matches.length + 1,
+          fixture: `${home} vs ${away}`,
+          home, away,
+          oH: o1, oD: o2, oA: o3,
+          pick, pickCode, odds, prob,
+          hedge, hedgeCode, hedgeOdds,
+          shin
+        });
+
+        pendingText = [];
+        pendingOdds = [];
+      }
+
+      function oD_valid(v) { return Math.max(1.05, v); }
+
+      for (let t of tokens) {
+        if (t.type === 'triplet') {
+          commitMatch(t.oH, t.oD, t.oA);
+        } else if (t.type === 'odd') {
+          pendingOdds.push(t.val);
+          if (pendingOdds.length === 3) {
+            commitMatch(pendingOdds[0], pendingOdds[1], pendingOdds[2]);
+          }
+        } else if (t.type === 'text') {
+          pendingText.push(t.val);
         }
       }
+
       return matches;
     }
 
-    // MULTI-BET ENGINE
+    // MULTI-BET ENGINE (Disjoint Sets with Flexible Minimum Odds)
     function executeMultiEngine() {
       let raw = document.getElementById('multiInput').value;
-      let matches = parseAnySportsbookText(raw);
-      let minTargetOdds = parseFloat(document.getElementById('minTargetOdds').value) || 3.00;
-      let legCount = parseInt(document.getElementById('legsPerSlip').value) || 3;
+      let matches = parseUniversalOddsText(raw);
+      let targetMinOdds = parseFloat(document.getElementById('minTargetOdds').value) || 3.00;
+      let legSize = parseInt(document.getElementById('legsPerSlip').value) || 3;
       let bankroll = parseFloat(document.getElementById('userBankroll').value) || 5000;
 
       let tbody = document.querySelector('#matrixTable tbody');
       tbody.innerHTML = '';
 
       if (matches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--red);">No matches detected. Try pasting clean text or click the demo button in Jackpot tab.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--red);">No matches detected. Check text or paste standard format.</td></tr>';
         return;
       }
 
       matches.forEach(m => {
-        let badge = m.bestProb >= 0.60 ? 'green' : 'yellow';
+        let badge = m.prob >= 0.55 ? 'green' : 'yellow';
         let tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>${m.fixture}</strong></td>
-          <td style="color:var(--green); font-weight:600;">${m.bestPick}</td>
-          <td><strong>${m.bestOdds.toFixed(2)}</strong></td>
-          <td>${(m.bestProb * 100).toFixed(1)}%</td>
-          <td><span class="badge ${badge}">${m.bestProb >= 0.60 ? 'A+ Anchor' : 'A Value'}</span></td>
+          <td style="color:var(--green); font-weight:600;">${m.pick}</td>
+          <td><strong>${m.odds.toFixed(2)}</strong></td>
+          <td>${(m.prob * 100).toFixed(1)}%</td>
+          <td><span class="badge ${badge}">${m.prob >= 0.55 ? 'A+ Anchor' : 'A Value'}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
-      // BUILD STRICTLY DISJOINT SLIPS
-      let pool = [...matches].sort((a, b) => b.bestProb - a.bestProb);
+      // BUILD STRICTLY DISJOINT ACCUMULATORS
+      let pool = [...matches].sort((a, b) => b.prob - a.prob);
       let slips = [];
       let usedIds = new Set();
 
       while (true) {
         let available = pool.filter(m => !usedIds.has(m.id));
-        if (available.length < legCount) break;
+        if (available.length < legSize) break;
 
         let bestCombo = null;
         let bestScore = -1;
 
-        function findCombo(start, current, odds, prob) {
-          if (current.length === legCount) {
-            if (odds >= minTargetOdds && prob > bestScore) {
-              bestScore = prob;
-              bestCombo = [...current];
+        // Search for highest-probability combo satisfying target odds
+        function searchCombo(start, curr, currentOdds, currentProb) {
+          if (curr.length === legSize) {
+            if (currentOdds >= targetMinOdds && currentProb > bestScore) {
+              bestScore = currentProb;
+              bestCombo = [...curr];
             }
             return;
           }
           for (let i = start; i < available.length; i++) {
-            findCombo(i + 1, [...current, available[i]], odds * available[i].bestOdds, prob * available[i].bestProb);
+            searchCombo(i + 1, [...curr, available[i]], currentOdds * available[i].odds, currentProb * available[i].prob);
           }
         }
-        findCombo(0, [], 1.0, 1.0);
+        searchCombo(0, [], 1.0, 1.0);
 
-        if (bestCombo) {
-          bestCombo.forEach(m => usedIds.add(m.id));
-          let totalOdds = bestCombo.reduce((acc, l) => acc * l.bestOdds, 1.0);
-          let totalProb = bestCombo.reduce((acc, l) => acc * l.bestProb, 1.0);
-          slips.push({ legs: bestCombo, odds: totalOdds, prob: totalProb });
-        } else {
-          break;
+        // Fallback: If no combination reaches targetMinOdds, take top available legs
+        if (!bestCombo) {
+          bestCombo = available.slice(0, legSize);
         }
+
+        bestCombo.forEach(m => usedIds.add(m.id));
+        let cOdds = bestCombo.reduce((acc, l) => acc * l.odds, 1.0);
+        let cProb = bestCombo.reduce((acc, l) => acc * l.prob, 1.0);
+        slips.push({ legs: bestCombo, odds: cOdds, prob: cProb });
       }
 
       let container = document.getElementById('slipsContainer');
       container.innerHTML = '';
 
       if (slips.length === 0) {
-        container.innerHTML = `<p style="color:var(--yellow);">No independent combinations met the minimum ${minTargetOdds.toFixed(2)} odds constraint. Lower target odds or provide more matches.</p>`;
+        container.innerHTML = `<p style="color:var(--yellow);">Need at least ${legSize} matches to construct an accumulator. Add more matches.</p>`;
         return;
       }
 
       slips.forEach((s, idx) => {
-        let b = s.odds - 1.0;
+        let b = Math.max(0.01, s.odds - 1.0);
         let kelly = Math.max(0.01, (b * s.prob - (1.0 - s.prob)) / b);
-        let stake = Math.max(50, Math.round((bankroll * (kelly * 0.25)) / 10) * 10);
+        let recStake = Math.max(50, Math.round((bankroll * (kelly * 0.25)) / 10) * 10);
 
         let legsHtml = s.legs.map(l => `
           <div class="slip-leg">
-            <span>⚽ <strong>${l.fixture}</strong> &bull; <span style="color:var(--green);">${l.bestPick}</span></span>
-            <span>@ ${l.bestOdds.toFixed(2)} (${(l.prob*100).toFixed(0)}% win)</span>
+            <span>⚽ <strong>${l.fixture}</strong> &bull; <span style="color:var(--green);">${l.pick}</span></span>
+            <span>@ ${l.odds.toFixed(2)} (${(l.prob*100).toFixed(0)}% win)</span>
           </div>
         `).join('');
 
         let box = document.createElement('div');
         box.className = 'slip-box';
         box.innerHTML = `
+          <div class="slip-head">
+            <span>🛡️ Independent Slip #${idx + 1} (Disjoint / 0% Shared Risk)</span>
+            <span>Odds: <strong style="color:#fff;">${s.odds.toFixed(2)}</strong> | Win Rate: <strong style="color:var(--green);">${(s.prob*100).toFixed(1)}%</strong> | Stake: <strong style="color:#60a5fa;">KSh ${recStake}</strong></span>
+          </div>
+          ${legsHtml}
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    // JACKPOT WHEELING ENGINE (With Instant Permutation Coup Lines)
+    function executeJackpotEngine() {
+      let raw = document.getElementById('jackpotInput').value;
+      let matches = parseUniversalOddsText(raw);
+      let tbody = document.querySelector('#jackpotTable tbody');
+      tbody.innerHTML = '';
+
+      if (matches.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--red);">No matches detected. Click a demo preset button or paste valid text.</td></tr>';
+        return;
+      }
+
+      let maxDoubles = parseInt(document.getElementById('maxDoubles').value) || 4;
+      maxDoubles = Math.min(maxDoubles, matches.length);
+
+      // Rank games by parity (smallest gap between home and away probability)
+      let sortedParity = [...matches].sort((a, b) => {
+        let pA = Math.abs(a.shin.pH - a.shin.pA);
+        let pB = Math.abs(b.shin.pH - b.shin.pA);
+        return pA - pB;
+      });
+
+      let hedgeSet = new Set(sortedParity.slice(0, maxDoubles).map(m => m.id));
+
+      matches.forEach((m, idx) => {
+        let isHedge = hedgeSet.has(m.id);
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${idx + 1}</strong></td>
+          <td><strong>${m.fixture}</strong></td>
+          <td style="color:var(--green); font-weight:bold;">${m.pick}</td>
+          <td style="color:#60a5fa; font-weight:bold;">${isHedge ? m.hedge : '— (Single Banker)'}</td>
+          <td><span class="badge ${isHedge ? 'yellow' : 'green'}">${isHedge ? '⚡ Tactical Double' : '🔒 Core Banker'}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // GENERATE WHEELING PERMUTATION LINES
+      let wheelingDiv = document.getElementById('wheelingOutput');
+      let totalLines = Math.pow(2, maxDoubles);
+      let baseStake = 15; // KSh standard base stake per line
+      let totalCost = totalLines * baseStake;
+
+      let allLines = [];
+      let displayLimit = Math.min(totalLines, 16);
+
+      for (let l = 0; l < totalLines; l++) {
+        let linePicks = [];
+        let dCount = 0;
+        matches.forEach(m => {
+          if (!hedgeSet.has(m.id)) {
+            linePicks.push(m.pickCode);
+          } else {
+            let bit = (l >> dCount) & 1;
+            let opt1 = m.hedgeCode.charAt(0);
+            let opt2 = m.hedgeCode.charAt(1) || 'X';
+            linePicks.push(bit === 0 ? opt1 : opt2);
+            dCount++;
+          }
+        });
+        allLines.push(linePicks);
+      }
+
+      let allLinesText = allLines.map((lp, i) => `Line #${i+1}: ${lp.join(' - ')}`).join('\n');
+
+      wheelingDiv.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <span>Generated Permutations: <strong>${totalLines} Unique Coupon Lines</strong> | Total Investment: <strong style="color:var(--green);">KSh ${totalCost.toLocaleString()}</strong> (@ KSh ${baseStake}/line)</span>
+          </div>
+          <button class="copy-btn" onclick="copyTextToClipboard(\`${allLinesText.replace(/`/g, '')}\`, 'All Lines Copied to Clipboard!')">📋 Copy All Lines</button>
+        </div>
+        <div id="linesGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:10px;"></div>
+      `;
+
+      let grid = document.getElementById('linesGrid');
+      for (let i = 0; i < displayLimit; i++) {
+        let card = document.createElement('div');
+        card.style = "background:#090f1d; border:1px solid #1e293b; border-radius:6px; padding:10px;";
+        let lineStr = allLines[i].join(' &bull; ');
+        let rawStr = allLines[i].join(' - ');
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <strong style="color:#93c5fd; font-size:0.8rem;">Line #${i + 1}</strong>
+            <button class="copy-btn" onclick="copyTextToClipboard('${rawStr}', 'Line #${i+1} Copied!')">Copy</button>
+          </div>
+          <div style="font-family:monospace; font-size:0.85rem; color:#f8fafc; word-break:break-all;">
+            ${lineStr}
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    }
+
+    function copyTextToClipboard(text, msg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => alert(msg)).catch(() => fallbackCopy(text, msg));
+      } else {
+        fallbackCopy(text, msg);
+      }
+    }
+
+    function fallbackCopy(text, msg) {
+      let ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      alert(msg);
+    }
+
+    // PRESET DEMO LOADERS
+    function fillPreset(type) {
+      let target = document.getElementById('jackpotInput');
+      let select = document.getElementById('jackpotPreset');
+
+      if (type === 'odibets') {
+        select.value = "10";
+        target.value = `SV Darmstadt 98\nArminia Bielefeld\n3.00 3.60 2.19\n\n1 FC Nuremberg\nHannover 96\n2.35 3.80 2.60\n\nFC Viktoria Cologne\nHansa Rostock\n2.85 3.55 2.30\n\nMontpellier HSC\nPau FC\n1.80 3.50 4.40\n\nDijon FCO\nStade Lavallois MFC\n1.98 3.50 3.60\n\nUnion Berlin\nSchalke 04\n2.37 3.65 2.95\n\nKidderminster Harriers FC\nHartlepool United\n2.24 3.35 2.85\n\nStade Rennais FC\nOlympique Marseille\n2.05 4.10 3.40\n\nVenezia FC\nACF Fiorentina\n2.95 3.50 2.47\n\nSevilla FC\nValencia CF\n1.93 3.50 4.40`;
+      } else if (type === 'betika') {
+        select.value = "15";
+        target.value = `Hoffenheim\nStuttgart\n2.46 4.00 2.65\n\nMainz\nEintracht Fr\n2.06 4.00 3.40\n\nBournemouth\nBrentford\n2.55 3.65 2.75\n\nNacional\nFc Alverca Sad\n2.65 3.30 2.75\n\nStrasbourg\nMonaco\n3.10 3.75 2.26\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14`;
+      } else if (type === 'sportpesa') {
+        select.value = "17";
+        target.value = `Lazio Roma\nAC Milan\n3.25 3.20 2.32\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14\n\nZulte Waregem\nCharleroi\n2.60 3.45 2.60\n\nCastellon\nDeportivo La Coruna\n2.50 2.90 2.40\n\nArouca\nSanta Clara\n2.60 3.15 2.80\n\nLa Louviere\nKortrijk\n2.41 3.25 2.90\n\nReal Sociedad\nAtletico Madrid\n2.90 3.55 2.41\n\nTenerife\nLeganes\n2.31 2.95 3.25`;
+      }
+      executeJackpotEngine();
+    }
+
+    // OCR ENGINE
+    async function processUploadedImage(file, mode) {
+      if (!file) return;
+      let label = mode === 'multi' ? document.getElementById('ocrMultiText') : document.getElementById('ocrJpText');
+      let targetInput = mode === 'multi' ? document.getElementById('multiInput') : document.getElementById('jackpotInput');
+
+      label.innerText = "⏳ Processing image through OCR...";
+
+      let img = new Image();
+      img.src = URL.createObjectURL(file);
+      await img.decode();
+
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      let d = imgData.data;
+
+      for (let i = 0; i < d.length; i += 4) {
+        let gray = (d[i] * 0.299) + (d[i+1] * 0.587) + (d[i+2] * 0.114);
+        let inverted = 255 - gray;
+        let thresh = inverted > 130 ? 255 : 0;
+        d[i] = thresh; d[i+1] = thresh; d[i+2] = thresh;
+      }
+      ctx.putImageData(imgData, 0, 0);
+
+      try {
+        let blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        const worker = await Tesseract.createWorker('eng');
+        const ret = await worker.recognize(blob);
+        await worker.terminate();
+        label.innerText = "✅ Extraction Complete!";
+        targetInput.value += "\n" + ret.data.text;
+        if (mode === 'multi') executeMultiEngine(); else executeJackpotEngine();
+      } catch (err) {
+        label.innerText = "❌ OCR Failed. Please paste text.";
+      }
+    }
+  </script>
+</body>
+</html>
