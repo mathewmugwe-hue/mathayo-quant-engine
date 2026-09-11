@@ -21,12 +21,12 @@
     .nav-btn { background: var(--card); border: 1px solid var(--border); color: var(--sub); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
     .nav-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 16px; }
+    .grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 16px; }
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
     h2 { margin: 0 0 12px; font-size: 0.8rem; color: var(--sub); text-transform: uppercase; letter-spacing: 0.05em; }
 
     textarea, input, select, button { width: 100%; background: var(--panel); border: 1px solid var(--border); color: #fff; padding: 9px 12px; border-radius: 6px; font-size: 0.82rem; }
-    textarea { height: 170px; font-family: ui-monospace, monospace; resize: vertical; }
+    textarea { height: 180px; font-family: ui-monospace, monospace; resize: vertical; }
     button { background: var(--accent); font-weight: 700; cursor: pointer; border: none; margin-top: 10px; padding: 11px; transition: 0.2s; }
     button:hover { background: var(--accent-hover); }
 
@@ -34,17 +34,20 @@
     .drop-zone:hover { border-color: var(--accent); }
 
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.8rem; }
-    th, td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
+    th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
     th { background: #0b1120; color: var(--sub); }
 
-    .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; display: inline-block; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; display: inline-block; }
     .badge.green { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid var(--green); }
     .badge.yellow { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid var(--yellow); }
 
     .slip-box { background: #0b1222; border: 1px solid #1e3a8a; border-left: 4px solid var(--green); border-radius: 6px; padding: 14px; margin-bottom: 12px; }
     .slip-head { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; color: #93c5fd; }
-    .slip-leg { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.8rem; border-bottom: 1px dashed #1e293b; }
+    .slip-leg { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.82rem; border-bottom: 1px dashed #1e293b; }
     .slip-leg:last-child { border-bottom: none; }
+    
+    .winner-tag { color: var(--green); font-weight: 700; font-size: 0.85rem; }
+    .double-tag { color: #60a5fa; font-weight: 600; font-size: 0.82rem; }
     .copy-btn { width: auto; padding: 5px 12px; margin-top: 0; background: #1e293b; font-size: 0.75rem; border: 1px solid #334155; }
     .copy-btn:hover { background: #334155; }
     .btn-row { display: flex; gap: 6px; margin-top: 6px; }
@@ -56,25 +59,25 @@
   <div class="header">
     <div>
       <h1>Mathayo Pro 2026 Engine</h1>
-      <p>Universal Bookmaker Parser • Bisection Shin Solver • Orthogonal Accas • Wheeling Systems</p>
+      <p>Universal Bookmaker Ingestion • Bisection Shin De-Biasing • Orthogonal Accas • Full Wheeling Jackpots</p>
     </div>
   </div>
 
   <div class="nav">
-    <button class="nav-btn active" onclick="switchTab('multi')">Orthogonal Multi-Bet Builder (0% Duplicate Risk)</button>
-    <button class="nav-btn" onclick="switchTab('jackpot')">Jackpot Wheeling Engine (SportPesa / Betika / Mozzart / Odi)</button>
+    <button class="nav-btn active" onclick="switchTab('multi')">Multi-Bet Builder (All Matches & Zero Duplicate Risk)</button>
+    <button class="nav-btn" onclick="switchTab('jackpot')">Jackpot Wheeling Engine (All Matches 10/15/16/17)</button>
   </div>
 
   <!-- MULTI-BET MODULE -->
   <div id="multiView">
     <div class="grid">
       <div class="card">
-        <h2>1. Sportsbook Paste / Screenshot</h2>
+        <h2>1. Paste Sportsbook Text / Screenshots</h2>
         <div class="drop-zone" onclick="document.getElementById('fileMulti').click()">
           <span id="ocrMultiText">📷 Upload Screenshot or Paste (Ctrl+V)</span>
           <input type="file" id="fileMulti" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'multi')">
         </div>
-        <textarea id="multiInput" placeholder="Paste any sportsbook schedule or odds format here..."></textarea>
+        <textarea id="multiInput" placeholder="Paste all matches or screenshot text here..."></textarea>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:8px;">
           <div>
@@ -95,24 +98,25 @@
           </div>
         </div>
 
-        <button onclick="executeMultiEngine()" style="background:var(--green);">Generate Non-Overlapping Accumulators</button>
+        <button onclick="executeMultiEngine()" style="background:var(--green);">Analyze All Matches & Build Slips</button>
       </div>
 
       <div class="card">
-        <h2>2. Evaluated Match Matrix</h2>
-        <div style="overflow-y:auto; max-height:430px;">
+        <h2>2. Evaluated Match Matrix (All Matches & Predicted Winners)</h2>
+        <div style="overflow-y:auto; max-height:450px;">
           <table id="matrixTable">
             <thead>
               <tr>
-                <th>Fixture</th>
-                <th>Selection</th>
+                <th>#</th>
+                <th>Home Team vs Away Team</th>
+                <th>Predicted Winner</th>
                 <th>Odds</th>
-                <th>Shin Win Prob</th>
-                <th>Grade</th>
+                <th>Win Prob</th>
+                <th>Safety</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="5" style="text-align:center; color:var(--sub);">Awaiting match fixtures...</td></tr>
+              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting match fixtures...</td></tr>
             </tbody>
           </table>
         </div>
@@ -120,34 +124,34 @@
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <h2>3. Independent Slips (Guaranteed Zero Leg Duplication)</h2>
+      <h2>3. Independent Slips (Strictly Disjoint / 0% Overlapping Matches)</h2>
       <div id="slipsContainer">
-        <p style="color:var(--sub); margin:0;">Accumulators will appear here. No match will ever be repeated across multiple slips.</p>
+        <p style="color:var(--sub); margin:0;">Accumulators will be built below using the analyzed matches above. Every match will be unique to its slip.</p>
       </div>
     </div>
   </div>
 
-  <!-- JACKPOT WHEELING MODULE -->
+  <!-- JACKPOT MODULE -->
   <div id="jackpotView" style="display:none;">
     <div class="grid">
       <div class="card">
-        <h2>1. Jackpot Sheet Input</h2>
+        <h2>1. Jackpot Match Sheet Input</h2>
         <div class="drop-zone" onclick="document.getElementById('fileJackpot').click()">
           <span id="ocrJpText">📷 Upload Jackpot Screenshot (Betika, SportPesa, Mozzart, Odi)</span>
           <input type="file" id="fileJackpot" accept="image/*" style="display:none" onchange="processUploadedImage(this.files[0], 'jp')">
         </div>
         <textarea id="jackpotInput" placeholder="Paste jackpot match rows or OCR text here..."></textarea>
 
-        <label style="font-size:0.72rem; color:var(--sub); margin-top:6px; display:block;">Quick-Test Available Formats:</label>
+        <label style="font-size:0.72rem; color:var(--sub); margin-top:6px; display:block;">Instant Load Presets (All Matches Included):</label>
         <div class="btn-row">
-          <button type="button" class="demo-btn" onclick="fillFormat(1)">⚡ Format 1 (LaLiga/Serie A)</button>
-          <button type="button" class="demo-btn" onclick="fillFormat(2)">⚡ Format 2 (Markets Grid)</button>
-          <button type="button" class="demo-btn" onclick="fillFormat(3)">⚡ Format 3 (Detailed 3-Way)</button>
+          <button type="button" class="demo-btn" onclick="fillJackpotPreset('odibets')">⚡ Odibets (10/10 Games)</button>
+          <button type="button" class="demo-btn" onclick="fillJackpotPreset('betika')">⚡ Betika (15/15 Games)</button>
+          <button type="button" class="demo-btn" onclick="fillJackpotPreset('sportpesa')">⚡ SportPesa (17/17 Games)</button>
         </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
           <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Jackpot Preset</label>
+            <label style="font-size:0.72rem; color:var(--sub);">Jackpot Size Target</label>
             <select id="jackpotPreset">
               <option value="10">Odibets (10 Games)</option>
               <option value="15" selected>Betika Must-Be-Won (15 Games)</option>
@@ -156,29 +160,30 @@
             </select>
           </div>
           <div>
-            <label style="font-size:0.72rem; color:var(--sub);">Max Allowed Double Chances</label>
+            <label style="font-size:0.72rem; color:var(--sub);">Max Double-Chance Covers</label>
             <input type="number" id="maxDoubles" value="4" min="1" max="7">
           </div>
         </div>
 
-        <button onclick="executeJackpotEngine()" style="background:var(--accent);">Generate Optimal Combinatorial Wheeling Strategy</button>
+        <button onclick="executeJackpotEngine()" style="background:var(--accent);">Evaluate All Matches & Generate Permutations</button>
       </div>
 
       <div class="card">
-        <h2>2. Tactical Banker / Double Chance Coverage Matrix</h2>
-        <div style="overflow-y:auto; max-height:430px;">
+        <h2>2. Jackpot Complete Roster Analysis</h2>
+        <div style="overflow-y:auto; max-height:450px;">
           <table id="jackpotTable">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Match</th>
-                <th>Banker (1X2)</th>
-                <th>Tactical Double</th>
+                <th>Home Team vs Away Team</th>
+                <th>Predicted Winner (Banker)</th>
+                <th>Tactical Double Cover</th>
+                <th>Win Prob</th>
                 <th>Role</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td colspan="5" style="text-align:center; color:var(--sub);">Awaiting jackpot fixtures...</td></tr>
+              <tr><td colspan="6" style="text-align:center; color:var(--sub);">Awaiting jackpot fixtures...</td></tr>
             </tbody>
           </table>
         </div>
@@ -186,9 +191,9 @@
     </div>
 
     <div class="card" style="margin-top:16px;">
-      <h2>3. Ready-To-Place Combinatorial Lines</h2>
+      <h2>3. Ready-To-Place Combinatorial Wheeling Lines</h2>
       <div id="wheelingOutput">
-        <p style="color:var(--sub); margin:0;">Click "Generate Optimal Combinatorial Wheeling Strategy" to produce the permutation lines and stake breakdown.</p>
+        <p style="color:var(--sub); margin:0;">Click "Evaluate All Matches & Generate Permutations" to view complete ticket lines.</p>
       </div>
     </div>
   </div>
@@ -207,9 +212,9 @@
       }
     }
 
-    // BISECTION SHIN SOLVER
+    // BISECTION SHIN DE-BIASING SOLVER
     function solveShin(oH, oD, oA) {
-      let p1 = 1 / oH, pX = 1 / oD, p2 = 1 / oA;
+      let p1 = 1 / Math.max(1.01, oH), pX = 1 / Math.max(1.01, oD), p2 = 1 / Math.max(1.01, oA);
       let beta = p1 + pX + p2;
       let low = 0.0, high = 0.49, z = 0.02;
 
@@ -230,165 +235,113 @@
       return { pH: h / sum, pD: d / sum, pA: a / sum, z: z };
     }
 
-    // UNIVERSAL MULTI-FORMAT FINITE STATE MACHINE PARSER
-    function parseUniversalSportsbookText(raw) {
+    // SANITIZATION AND SECONDARY MARKET FIREWALL
+    function cleanRawText(raw) {
+      let lines = raw.split('\n').map(l => l.replace(/[\u2013\u2014]/g, '-').trim()).filter(l => l.length > 0);
+      let clean = [];
+
+      for (let l of lines) {
+        // Discard browser navigation, OS chrome, bookmark junk
+        if (/(odibets\.com|sportpesa\.com|betika\.com|mozzartbet|SafariTour|Dashboard|Netflix|YouTube|PayPal|Gmail|LinkedIn|Inbox|admin@|Ask Gemini)/i.test(l)) continue;
+        if (/(Promotion|Promatians|Prediction Market|Livescore|Casino|DEPOSIT|How to play|Markets|Results|correct precicions|EE Wo)/i.test(l)) continue;
+        
+        // Discard secondary markets and fake match text
+        if (/^(Over\/Under|UNDER|OVER|Draw no bet|Both Teams|Full Time|3 Way|Double Chance)/i.test(l)) continue;
+        if (/(Over\/Under|UNDER\s+\d|OVER\s+\d|Draw no bet)/i.test(l)) continue;
+        if (/^r\/Under/i.test(l)) continue; // Kills "r/Under" scrap artifacts
+        if (/^(\+?\d+\s+more|\+\d+\s+Markets|🔥\s*HOT|#\d+|ID:\s*\d+|Teams)$/i.test(l)) continue;
+        if (/^\d{1,2}[\/\.]\d{1,2}(?:\/\d{2,4})?(\s*,\s*|\s*-\s*|\s+)\d{1,2}:\d{2}/.test(l)) continue;
+        if (/^\d{1,2}:\d{2}(h)?$/.test(l)) continue;
+
+        clean.push(l);
+      }
+      return clean;
+    }
+
+    // EXTRACT ALL MATCHES WITH TEAM NAMES AND WHO WILL WIN
+    function parseAllMatches(raw) {
       if (!raw || !raw.trim()) return [];
 
-      // Step 1: Normalize line endings and characters
-      let text = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/[\u2013\u2014]/g, '-');
-      
-      // Step 2: Split text into blocks by league markers, ID timestamps, or double newlines
-      let rawBlocks = text.split(/(?=(?:[A-Za-z\s]+[\/•]\s*[A-Za-z0-9\s]+|\d{2}\/\d{2}(?:\/\d{2,4})?\s*-\s*\d{2}:\d{2}\s*\|\s*ID:|\bTeams\b))/gi);
-      
-      if (rawBlocks.length <= 1) {
-        rawBlocks = text.split(/\n\s*\n\s*\n/);
-      }
-
+      let cleanLines = cleanRawText(raw);
       let matches = [];
+      let i = 0;
 
-      for (let block of rawBlocks) {
-        let lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        if (lines.length < 2) continue;
+      let isStrictOdd = v => {
+        if (/[a-zA-Z]/.test(v)) return false;
+        let num = parseFloat(v);
+        return !isNaN(num) && num >= 1.05 && num <= 40.0 && /^\d+(\.\d+)?$/.test(v.trim());
+      };
 
-        // Clean out noise lines
-        let filtered = [];
-        for (let l of lines) {
-          if (/^(\+?\d+\s+more|\+\d+\s+Markets|🔥\s*HOT|#\d+|ID:\s*\d+|Teams|3\s*Way)$/i.test(l)) continue;
-          if (/^(Over\/Under|Double Chance|Draw no bet|Both Teams To Score|Full Time)/i.test(l)) continue;
-          if (/^\d{1,2}[\/\.]\d{1,2}(?:\/\d{2,4})?(\s*,\s*|\s*-\s*|\s+)\d{1,2}:\d{2}/.test(l)) continue;
-          filtered.push(l);
+      while (i < cleanLines.length) {
+        let l = cleanLines[i];
+
+        // Case 1: Triple Odds on single line (e.g. "3.00 3.60 2.19" or "1 3.00 X 3.60 2 2.19")
+        let tokens = l.split(/\s+/).filter(t => !/^(1|X|2|HOME|DRAW|AWAY)$/i.test(t));
+        if (tokens.length === 3 && tokens.every(t => isStrictOdd(t))) {
+          let oH = parseFloat(tokens[0]), oD = parseFloat(tokens[1]), oA = parseFloat(tokens[2]);
+          let t1 = cleanLines[i-2] || "Home Team", t2 = cleanLines[i-1] || "Away Team";
+          
+          let m = buildMatchObject(matches.length + 1, t1, t2, oH, oD, oA);
+          if (m) matches.push(m);
+          i++;
+          continue;
         }
 
-        // Extract teams
-        let home = "", away = "";
-        let candidateTeams = [];
+        // Case 2: Odds split across individual lines
+        if (isStrictOdd(cleanLines[i])) {
+          // Look forward for 3 odds
+          let oList = [];
+          let lookAhead = i;
+          while (lookAhead < cleanLines.length && oList.length < 3) {
+            let item = cleanLines[lookAhead];
+            if (isStrictOdd(item)) {
+              oList.push(parseFloat(item));
+            } else if (!/^(1|X|2|HOME|DRAW|AWAY)$/i.test(item)) {
+              break;
+            }
+            lookAhead++;
+          }
 
-        for (let l of filtered) {
-          // Reject lines that are strictly odds, market headers, or numbers
-          if (/^(\d+(\.\d+)?|1|X|2|1\s*or\s*X|X\s*or\s*2|1\s*or\s*2|Home|Away|Draw|Under|Over)$/i.test(l)) continue;
-          if (/^[A-Za-z\s]+[\/•]\s*[A-Za-z0-9\s]+(?:\(\d+\))?$/.test(l)) continue; // League banner
-          if (l.length >= 3 && !/^\d+$/.test(l)) {
-            candidateTeams.push(l);
+          if (oList.length === 3) {
+            // Team names precede the first odd
+            let t1 = cleanLines[i-2] || cleanLines[i-3] || `Match #${matches.length + 1} Home`;
+            let t2 = cleanLines[i-1] || `Match #${matches.length + 1} Away`;
+            
+            let m = buildMatchObject(matches.length + 1, t1, t2, oList[0], oList[1], oList[2]);
+            if (m) matches.push(m);
+            i = lookAhead;
+            continue;
           }
         }
 
-        if (candidateTeams.length >= 2) {
-          home = candidateTeams[0].replace(/^\d+[\.\s\-]+/, '').trim();
-          away = candidateTeams[1].replace(/^\d+[\.\s\-]+/, '').trim();
-        } else if (candidateTeams.length === 1 && (candidateTeams[0].includes(" vs ") || candidateTeams[0].includes(" - "))) {
-          let s = candidateTeams[0].replace(/^\d+[\.\s\-]+/, '').trim();
-          let parts = s.includes(" vs ") ? s.split(" vs ") : s.split(" - ");
-          home = parts[0].trim(); away = parts[1].trim();
-        }
-
-        // Extract the three primary 1X2 odds
-        let oH = null, oD = null, oA = null;
-
-        // Pattern A: Look for explicit labels: Sevilla FC 1.98, Draw 3.35, Valencia 4.20
-        for (let i = 0; i < filtered.length - 1; i++) {
-          let cur = filtered[i];
-          let next = filtered[i+1];
-          let val = parseFloat(next);
-
-          if (!isNaN(val) && val >= 1.05 && val <= 35.0 && /^\d+(\.\d+)?$/.test(next)) {
-            if (/^(1|Home)$/i.test(cur) || (home && cur.toLowerCase().includes(home.toLowerCase()))) {
-              if (oH === null) oH = val;
-            } else if (/^(X|Draw)$/i.test(cur)) {
-              if (oD === null) oD = val;
-            } else if (/^(2|Away)$/i.test(cur) || (away && cur.toLowerCase().includes(away.toLowerCase()))) {
-              if (oA === null) oA = val;
+        // Case 3: Labeled lines (Sevilla FC 1.98 ... Draw 3.35 ... Valencia 4.20)
+        if (i < cleanLines.length - 2) {
+          let num1 = parseFloat(cleanLines[i+1]);
+          let num2 = parseFloat(cleanLines[i+3]);
+          let num3 = parseFloat(cleanLines[i+5]);
+          if (!isNaN(num1) && !isNaN(num2) && !isNaN(num3) && num1 >= 1.05 && num2 >= 1.05 && num3 >= 1.05) {
+            let t1 = cleanLines[i], t2 = cleanLines[i+4];
+            let m = buildMatchObject(matches.length + 1, t1, t2, num1, num2, num3);
+            if (m) {
+              matches.push(m);
+              i += 6;
+              continue;
             }
           }
         }
 
-        // Pattern B: Look for three raw odds appearing under the team names
-        if (oH === null || oD === null || oA === null) {
-          let oddsList = [];
-          for (let l of filtered) {
-            let num = parseFloat(l);
-            if (!isNaN(num) && num >= 1.05 && num <= 35.0 && /^\d+(\.\d{1,2})?$/.test(l)) {
-              oddsList.push(num);
-            }
-          }
-          if (oddsList.length >= 3) {
-            oH = oddsList[0];
-            oD = oddsList[1];
-            oA = oddsList[2];
-          }
-        }
-
-        if (oH && oD && oA) {
-          if (!home) home = `Match #${matches.length + 1} Home`;
-          if (!away) away = `Match #${matches.length + 1} Away`;
-
-          let shin = solveShin(oH, oD, oA);
-
-          // Extract real double-chance odds if present, or compute exact synthetic values
-          let dc1X = 1 / ((1/oH) + (1/oD));
-          let dcX2 = 1 / ((1/oD) + (1/oA));
-          let dc12 = 1 / ((1/oH) + (1/oA));
-
-          // Check if explicit double chance odds are present in text
-          for (let i = 0; i < filtered.length - 1; i++) {
-            let cur = filtered[i], next = parseFloat(filtered[i+1]);
-            if (!isNaN(next) && next > 1.01 && next < 10.0) {
-              if (/^1\s*or\s*X$/i.test(cur)) dc1X = next;
-              if (/^X\s*or\s*2$/i.test(cur)) dcX2 = next;
-              if (/^1\s*or\s*2$/i.test(cur)) dc12 = next;
-            }
-          }
-
-          let pick = "", pickCode = "1", odds = oH, prob = shin.pH;
-          let hedge = "", hedgeCode = "1X", hedgeOdds = dc1X;
-
-          if (shin.pH >= shin.pA && shin.pH >= 0.44) {
-            pick = `${home} (1)`; pickCode = "1"; odds = oH; prob = shin.pH;
-            hedge = `${home} or Draw (1X)`; hedgeCode = "1X"; hedgeOdds = dc1X;
-          } else if (shin.pA > shin.pH && shin.pA >= 0.44) {
-            pick = `${away} (2)`; pickCode = "2"; odds = oA; prob = shin.pA;
-            hedge = `Draw or ${away} (X2)`; hedgeCode = "X2"; hedgeOdds = dcX2;
-          } else {
-            let p1X = shin.pH + shin.pD;
-            let pX2 = shin.pA + shin.pD;
-            if (p1X >= pX2) {
-              pick = `${home} or Draw (1X)`; pickCode = "1"; odds = dc1X; prob = p1X;
-              hedge = `${home} or ${away} (12)`; hedgeCode = "12"; hedgeOdds = dc12;
-            } else {
-              pick = `Draw or ${away} (X2)`; pickCode = "2"; odds = dcX2; prob = pX2;
-              hedge = `${home} or ${away} (12)`; hedgeCode = "12"; hedgeOdds = dc12;
-            }
-          }
-
-          matches.push({
-            id: matches.length + 1,
-            fixture: `${home} vs ${away}`,
-            home, away,
-            oH, oD, oA,
-            pick, pickCode, odds, prob,
-            hedge, hedgeCode, hedgeOdds,
-            shin
-          });
-        }
+        i++;
       }
 
-      // Final fallback: Global triplet parser if block chunking was skipped
+      // Safety Fallback: Triplet decimal scanner if line grouping was disjointed
       if (matches.length === 0) {
-        let allDecimals = raw.match(/\b\d{1,2}\.\d{2}\b/g);
+        let allDecimals = raw.match(/\b[1-9]\d*(?:\.\d{1,2})\b/g);
         if (allDecimals && allDecimals.length >= 3) {
-          for (let i = 0; i < allDecimals.length - 2; i += 3) {
-            let h = parseFloat(allDecimals[i]), d = parseFloat(allDecimals[i+1]), a = parseFloat(allDecimals[i+2]);
-            if (h >= 1.05 && d >= 1.05 && a >= 1.05) {
-              let s = solveShin(h, d, a);
-              let mId = matches.length + 1;
-              matches.push({
-                id: mId,
-                fixture: `Fixture #${mId}`,
-                home: `Home #${mId}`, away: `Away #${mId}`,
-                oH: h, oD: d, oA: a,
-                pick: `Fixture #${mId} Win (1)`, pickCode: "1", odds: h, prob: s.pH,
-                hedge: `Fixture #${mId} (1X)`, hedgeCode: "1X", hedgeOdds: 1 / ((1/h)+(1/d)),
-                shin: s
-              });
+          for (let k = 0; k <= allDecimals.length - 3; k += 3) {
+            let o1 = parseFloat(allDecimals[k]), o2 = parseFloat(allDecimals[k+1]), o3 = parseFloat(allDecimals[k+2]);
+            if (o1 >= 1.05 && o2 >= 1.05 && o3 >= 1.05) {
+              let m = buildMatchObject(matches.length + 1, `Team #${matches.length + 1} A`, `Team #${matches.length + 1} B`, o1, o2, o3);
+              if (m) matches.push(m);
             }
           }
         }
@@ -397,10 +350,85 @@
       return matches;
     }
 
-    // MULTI-BET ENGINE (Strict Orthogonality & Fractional Kelly)
+    // CONSTRUCT ACCURATE PREDICTED WINNER OBJECT
+    function buildMatchObject(id, rawHome, rawAway, oH, oD, oA) {
+      let home = rawHome.replace(/^\d+[\.\s\-]+/, '').trim();
+      let away = rawAway.replace(/^\d+[\.\s\-]+/, '').trim();
+
+      // Guard against secondary market artifacts
+      if (/^(OVER|UNDER|Draw no bet|Full Time)/i.test(home) || /^(OVER|UNDER|Draw no bet|Full Time)/i.test(away)) {
+        return null;
+      }
+
+      let shin = solveShin(oH, oD, oA);
+
+      // Synthetic double chance pricing
+      let dc1X = 1 / ((1/oH) + (1/oD));
+      let dcX2 = 1 / ((1/oD) + (1/oA));
+      let dc12 = 1 / ((1/oH) + (1/oA));
+
+      let predictedWinner = "";
+      let winningPick = "";
+      let winningOdds = 0;
+      let winningProb = 0;
+      let hedgeCover = "";
+      let hedgeCode = "";
+
+      // Decision Engine for Who Will Win
+      if (shin.pH >= 0.45 && shin.pH >= shin.pA) {
+        predictedWinner = `🏆 ${home} (Home Win)`;
+        winningPick = "1";
+        winningOdds = oH;
+        winningProb = shin.pH;
+        hedgeCover = `🛡️ ${home} or Draw (1X)`;
+        hedgeCode = "1X";
+      } else if (shin.pA >= 0.45 && shin.pA > shin.pH) {
+        predictedWinner = `🏆 ${away} (Away Win)`;
+        winningPick = "2";
+        winningOdds = oA;
+        winningProb = shin.pA;
+        hedgeCover = `🛡️ Draw or ${away} (X2)`;
+        hedgeCode = "X2";
+      } else {
+        // High-parity matches: assign the safer Double Chance as recommended winner
+        let p1X = shin.pH + shin.pD;
+        let pX2 = shin.pA + shin.pD;
+        if (p1X >= pX2) {
+          predictedWinner = `🛡️ ${home} or Draw (1X Safe)`;
+          winningPick = "1X";
+          winningOdds = dc1X;
+          winningProb = p1X;
+          hedgeCover = `⚡ ${home} or ${away} (12)`;
+          hedgeCode = "12";
+        } else {
+          predictedWinner = `🛡️ Draw or ${away} (X2 Safe)`;
+          winningPick = "X2";
+          winningOdds = dcX2;
+          winningProb = pX2;
+          hedgeCover = `⚡ ${home} or ${away} (12)`;
+          hedgeCode = "12";
+        }
+      }
+
+      return {
+        id,
+        fixture: `${home} vs ${away}`,
+        home, away,
+        oH, oD, oA,
+        predictedWinner,
+        winningPick,
+        winningOdds,
+        winningProb,
+        hedgeCover,
+        hedgeCode,
+        shin
+      };
+    }
+
+    // MULTI-BET PIPELINE: ALL MATCHES DISPLAYED + ZERO OVERLAP ACCAS
     function executeMultiEngine() {
       let raw = document.getElementById('multiInput').value;
-      let matches = parseUniversalSportsbookText(raw);
+      let matches = parseAllMatches(raw);
       let targetMinOdds = parseFloat(document.getElementById('minTargetOdds').value) || 3.00;
       let legSize = parseInt(document.getElementById('legsPerSlip').value) || 3;
       let bankroll = parseFloat(document.getElementById('userBankroll').value) || 5000;
@@ -409,25 +437,27 @@
       tbody.innerHTML = '';
 
       if (matches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--red);">Unable to parse fixtures. Check paste or select a demo format.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--red);">No valid matches parsed. Check input or clean text.</td></tr>';
         return;
       }
 
+      // 1. SHOW ALL MATCHES AND PREDICTED WINNERS
       matches.forEach(m => {
-        let badge = m.prob >= 0.55 ? 'green' : 'yellow';
+        let badge = m.winningProb >= 0.55 ? 'green' : 'yellow';
         let tr = document.createElement('tr');
         tr.innerHTML = `
+          <td><strong>${m.id}</strong></td>
           <td><strong>${m.fixture}</strong></td>
-          <td style="color:var(--green); font-weight:600;">${m.pick}</td>
-          <td><strong>${m.odds.toFixed(2)}</strong></td>
-          <td>${(m.prob * 100).toFixed(1)}%</td>
-          <td><span class="badge ${badge}">${m.prob >= 0.55 ? 'A+ Anchor' : 'A Value'}</span></td>
+          <td><span class="winner-tag">${m.predictedWinner}</span></td>
+          <td><strong>${m.winningOdds.toFixed(2)}</strong></td>
+          <td>${(m.winningProb * 100).toFixed(1)}%</td>
+          <td><span class="badge ${badge}">${m.winningProb >= 0.55 ? 'High Confidence' : 'Parity Watch'}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
-      // CONSTRUCT STRICTLY DISJOINT SLIPS
-      let pool = [...matches].sort((a, b) => b.prob - a.prob);
+      // 2. BUILD NON-OVERLAPPING DISJOINT ACCAS
+      let pool = [...matches].sort((a, b) => b.winningProb - a.winningProb);
       let slips = [];
       let usedIds = new Set();
 
@@ -447,7 +477,7 @@
             return;
           }
           for (let i = start; i < available.length; i++) {
-            searchCombo(i + 1, [...curr, available[i]], currentOdds * available[i].odds, currentProb * available[i].prob);
+            searchCombo(i + 1, [...curr, available[i]], currentOdds * available[i].winningOdds, currentProb * available[i].winningProb);
           }
         }
         searchCombo(0, [], 1.0, 1.0);
@@ -457,8 +487,8 @@
         }
 
         bestCombo.forEach(m => usedIds.add(m.id));
-        let cOdds = bestCombo.reduce((acc, l) => acc * l.odds, 1.0);
-        let cProb = bestCombo.reduce((acc, l) => acc * l.prob, 1.0);
+        let cOdds = bestCombo.reduce((acc, l) => acc * l.winningOdds, 1.0);
+        let cProb = bestCombo.reduce((acc, l) => acc * l.winningProb, 1.0);
         slips.push({ legs: bestCombo, odds: cOdds, prob: cProb });
       }
 
@@ -466,7 +496,7 @@
       container.innerHTML = '';
 
       if (slips.length === 0) {
-        container.innerHTML = `<p style="color:var(--yellow);">Need at least ${legSize} matches to construct an accumulator. Add more matches.</p>`;
+        container.innerHTML = `<p style="color:var(--yellow);">Need at least ${legSize} matches to form an accumulator.</p>`;
         return;
       }
 
@@ -477,8 +507,8 @@
 
         let legsHtml = s.legs.map(l => `
           <div class="slip-leg">
-            <span>⚽ <strong>${l.fixture}</strong> &bull; <span style="color:var(--green);">${l.pick}</span></span>
-            <span>@ ${l.odds.toFixed(2)} (${(l.prob*100).toFixed(0)}% win)</span>
+            <span>⚽ <strong>${l.fixture}</strong> &bull; <span class="winner-tag">${l.predictedWinner}</span></span>
+            <span>@ ${l.winningOdds.toFixed(2)} (${(l.winningProb*100).toFixed(0)}% win)</span>
           </div>
         `).join('');
 
@@ -487,7 +517,7 @@
         box.innerHTML = `
           <div class="slip-head">
             <span>🛡️ Independent Slip #${idx + 1} (Disjoint / 0% Shared Risk)</span>
-            <span>Odds: <strong style="color:#fff;">${s.odds.toFixed(2)}</strong> | Win Rate: <strong style="color:var(--green);">${(s.prob*100).toFixed(1)}%</strong> | Stake: <strong style="color:#60a5fa;">KSh ${recStake}</strong></span>
+            <span>Total Odds: <strong style="color:#fff;">${s.odds.toFixed(2)}</strong> | Model Win Rate: <strong style="color:var(--green);">${(s.prob*100).toFixed(1)}%</strong> | Stake: <strong style="color:#60a5fa;">KSh ${recStake}</strong></span>
           </div>
           ${legsHtml}
         `;
@@ -495,21 +525,22 @@
       });
     }
 
-    // JACKPOT ENGINE (With Permutations & Full Lines)
+    // JACKPOT PIPELINE: ALL MATCHES DISPLAYED + FULL WHEELING
     function executeJackpotEngine() {
       let raw = document.getElementById('jackpotInput').value;
-      let matches = parseUniversalSportsbookText(raw);
+      let matches = parseAllMatches(raw);
       let tbody = document.querySelector('#jackpotTable tbody');
       tbody.innerHTML = '';
 
       if (matches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--red);">No matches detected. Select a demo format or paste valid match blocks.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--red);">No matches detected. Select an Instant Preset or clean paste text.</td></tr>';
         return;
       }
 
       let maxDoubles = parseInt(document.getElementById('maxDoubles').value) || 4;
       maxDoubles = Math.min(maxDoubles, matches.length);
 
+      // Rank games by outcome uncertainty for double chance covers
       let sortedParity = [...matches].sort((a, b) => {
         let pA = Math.abs(a.shin.pH - a.shin.pA);
         let pB = Math.abs(b.shin.pH - b.shin.pA);
@@ -518,22 +549,25 @@
 
       let hedgeSet = new Set(sortedParity.slice(0, maxDoubles).map(m => m.id));
 
-      matches.forEach((m, idx) => {
+      // 1. SHOW ALL JACKPOT MATCHES (10/10, 15/15, etc.)
+      matches.forEach(m => {
         let isHedge = hedgeSet.has(m.id);
         let tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${idx + 1}</strong></td>
+          <td><strong>${m.id}</strong></td>
           <td><strong>${m.fixture}</strong></td>
-          <td style="color:var(--green); font-weight:bold;">${m.pick}</td>
-          <td style="color:#60a5fa; font-weight:bold;">${isHedge ? m.hedge : '— (Single Banker)'}</td>
+          <td><span class="winner-tag">${m.predictedWinner}</span></td>
+          <td><span class="double-tag">${isHedge ? m.hedgeCover : '— (Locked Single)'}</span></td>
+          <td>${(m.winningProb * 100).toFixed(1)}%</td>
           <td><span class="badge ${isHedge ? 'yellow' : 'green'}">${isHedge ? '⚡ Tactical Double' : '🔒 Core Banker'}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
+      // 2. GENERATE COMPLETE PLAYABLE LINES
       let wheelingDiv = document.getElementById('wheelingOutput');
       let totalLines = Math.pow(2, maxDoubles);
-      let baseStake = 15;
+      let baseStake = 15; // KSh standard line stake
       let totalCost = totalLines * baseStake;
 
       let allLines = [];
@@ -544,7 +578,7 @@
         let dCount = 0;
         matches.forEach(m => {
           if (!hedgeSet.has(m.id)) {
-            linePicks.push(m.pickCode);
+            linePicks.push(m.winningPick.charAt(0));
           } else {
             let bit = (l >> dCount) & 1;
             let opt1 = m.hedgeCode.charAt(0);
@@ -561,7 +595,7 @@
       wheelingDiv.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
           <div>
-            <span>Generated Permutations: <strong>${totalLines} Unique Lines</strong> | Total Investment: <strong style="color:var(--green);">KSh ${totalCost.toLocaleString()}</strong> (@ KSh ${baseStake}/line)</span>
+            <span>Generated: <strong>${totalLines} Unique Lines</strong> for <strong>All ${matches.length} Matches</strong> | Investment: <strong style="color:var(--green);">KSh ${totalCost.toLocaleString()}</strong> (@ KSh ${baseStake}/line)</span>
           </div>
           <button class="copy-btn" onclick="copyTextToClipboard(\`${allLinesText.replace(/`/g, '')}\`, 'All Lines Copied!')">📋 Copy All Lines</button>
         </div>
@@ -576,7 +610,7 @@
         let rawStr = allLines[i].join(' - ');
         card.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <strong style="color:#93c5fd; font-size:0.8rem;">Line #${i + 1}</strong>
+            <strong style="color:#93c5fd; font-size:0.8rem;">Line #${i + 1} (${matches.length} Picks)</strong>
             <button class="copy-btn" onclick="copyTextToClipboard('${rawStr}', 'Line #${i+1} Copied!')">Copy</button>
           </div>
           <div style="font-family:monospace; font-size:0.85rem; color:#f8fafc; word-break:break-all;">
@@ -605,184 +639,20 @@
       alert(msg);
     }
 
-    // FORMAT TEST LOADERS
-    function fillFormat(num) {
+    // PRESET LOADERS FOR VERIFICATION
+    function fillJackpotPreset(type) {
       let target = document.getElementById('jackpotInput');
-      if (num === 1) {
-        target.value = `Spain / LaLiga (1)
-🔥  HOT
-Sevilla FC
-Valencia CF
-11/09 22:00
-#3497
-+158 more
+      let select = document.getElementById('jackpotPreset');
 
-1 
-1.94
-
-X 
-3.50
-
-2 
-4.40
-
-1 or X 
-1.24
-
-1 or 2 
-1.32
-
-X or 2 
-1.86
-
-Italy / Serie A (1)
-🔥  HOT
-Venezia FC
-ACF Fiorentina
-11/09 21:45
-#7361
-+158 more
-
-1 
-2.95
-
-X 
-3.50
-
-2 
-2.47
-
-1 or X 
-1.56
-
-1 or 2 
-1.33
-
-X or 2 
-1.42
-
-France / Ligue 1 (1)
-🔥  HOT
-Stade Rennais FC
-Olympique Marseille
-11/09 21:45
-#3996
-+158 more
-
-1 
-2.04
-
-X 
-4.10
-
-2 
-3.40
-
-1 or X 
-1.34
-
-1 or 2 
-1.27
-
-X or 2 
-1.78`;
-      } else if (num === 2) {
-        target.value = `Teams
-1
-X
-2
-Spain • LaLiga
-11/09, 22:00
-Sevilla
-Valencia
-
-1.98
-
-3.40
-
-4.30
-+85 Markets
-
-Italy • Serie A
-11/09, 21:45
-Venezia
-Acf Fiorentina
-
-2.80
-
-3.50
-
-2.60
-+85 Markets
-
-Germany • Bundesliga
-11/09, 21:30
-Union Berlin
-Schalke 04
-
-2.45
-
-3.60
-
-2.90
-+85 Markets`;
-      } else if (num === 3) {
-        target.value = `11/09/26 - 22:00 | ID: 3616
- Sevilla FC
- Valencia
-25
-3 Way
-Sevilla FC
-1.98
-Draw
-3.35
-Valencia
-4.20
-Double Chance
-
-Double Chance
-1 or X
-1.25
-X or 2
-1.82
-1 or 2
-1.34
-Over/Under 4.50
-
-Over/Under 4.5
-Draw no bet - Full Time
-
-Home
-1.38
-Away
-2.80
-
-11/09/26 - 21:45 | ID: 4123
- Rennes
- Marseille
-25
-3 Way
-Rennes
-2.03
-Draw
-3.95
-Marseille
-3.40
-Double Chance
-
-Double Chance
-1 or X
-1.33
-X or 2
-1.77
-1 or 2
-1.27
-Over/Under 4.50
-
-OVER 4.50
-3.50
-UNDER 4.50
-1.29`;
+      if (type === 'odibets') {
+        select.value = "10";
+        target.value = `SV Darmstadt 98\nArminia Bielefeld\n3.00 3.60 2.19\n\n1 FC Nuremberg\nHannover 96\n2.35 3.80 2.60\n\nFC Viktoria Cologne\nHansa Rostock\n2.85 3.55 2.30\n\nMontpellier HSC\nPau FC\n1.80 3.50 4.40\n\nDijon FCO\nStade Lavallois MFC\n1.98 3.50 3.60\n\nUnion Berlin\nSchalke 04\n2.37 3.65 2.95\n\nKidderminster Harriers FC\nHartlepool United\n2.24 3.35 2.85\n\nStade Rennais FC\nOlympique Marseille\n2.05 4.10 3.40\n\nVenezia FC\nACF Fiorentina\n2.95 3.50 2.47\n\nSevilla FC\nValencia CF\n1.93 3.50 4.40`;
+      } else if (type === 'betika') {
+        select.value = "15";
+        target.value = `Hoffenheim\nStuttgart\n2.46 4.00 2.65\n\nMainz\nEintracht Fr\n2.06 4.00 3.40\n\nBournemouth\nBrentford\n2.55 3.65 2.75\n\nNacional\nFc Alverca Sad\n2.65 3.30 2.75\n\nStrasbourg\nMonaco\n3.10 3.75 2.26\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14`;
+      } else if (type === 'sportpesa') {
+        select.value = "17";
+        target.value = `Lazio Roma\nAC Milan\n3.25 3.20 2.32\n\nParis FC\nLyon\n2.65 3.65 2.60\n\nLorient\nToulouse\n2.60 3.25 2.85\n\nAuxerre\nNice\n2.60 3.25 2.80\n\nLecce\nMonza\n2.70 3.15 2.85\n\nAvellino\nPalermo\n3.70 3.15 1.99\n\nRanders\nOdense\n2.21 3.50 3.10\n\nGenclerbirligi\nKasimpasa\n2.25 3.25 3.15\n\nValladolid\nOviedo\n2.24 2.85 3.15\n\nKFUM Oslo\nAalesunds\n2.36 3.60 2.65\n\nMan United\nMan City\n3.10 3.70 2.14\n\nZulte Waregem\nCharleroi\n2.60 3.45 2.60\n\nCastellon\nDeportivo La Coruna\n2.50 2.90 2.40\n\nArouca\nSanta Clara\n2.60 3.15 2.80\n\nLa Louviere\nKortrijk\n2.41 3.25 2.90\n\nReal Sociedad\nAtletico Madrid\n2.90 3.55 2.41\n\nTenerife\nLeganes\n2.31 2.95 3.25`;
       }
       executeJackpotEngine();
     }
